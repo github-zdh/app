@@ -1,0 +1,42 @@
+{
+	"index.html": {
+		"refer": [
+			"index-menu.html",
+			"examples/guide.html",
+			"examples/info.html",
+			"examples/buttons.html",
+			"examples/setting.html",
+			"examples/nav.html",
+			"examples/nav_transparent.html",
+			"examples/nav-nativeObj.html",
+			"examples/nav_transparent_native.html",
+			"examples/offcanvas-drag-down.html",
+			"examples/offcanvas-drag-left.html",
+			"examples/offcanvas-drag-right-plus-main.html",
+			"examples/offcanvas-drag-right.html",
+			"examples/popovers.html",
+			"examples/tabbar.html",
+			"examples/tab-with-viewpagerindicator.html",
+			"examples/tab-top-webview-main.html"
+		],
+		"resources": []
+	},
+	"examples/offcanvas-drag-right-plus-main.html": {
+		"refer": [
+			"examples/offcanvas-drag-right-plus-menu.html"
+		],
+		"resources": []
+	},
+	"examples/tab-top-webview-main.html": {
+		"resources": [
+			"examples/tab-top-subpage-1.html"
+		],
+		"refer": [
+			"examples/tab-top-subpage-1.html",
+			"examples/tab-top-subpage-2.html",
+			"examples/tab-top-subpage-5.html",
+			"examples/tab-top-subpage-3.html",
+			"examples/tab-top-subpage-4.html"
+		]
+	}
+}

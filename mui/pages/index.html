@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="../js/mui.min.js"></script>
+    <link href="../css/mui.css" rel="stylesheet"/>
+
+    <script>
+		mui.init();
+    </script>
+	<script>
+	var list = mui.openWindow({
+		    url:'./list.html',
+		    id:'list',
+		    styles:{
+		      top:'105px',//新页面顶部位置
+		      bottom:'45px'//新页面底部位置
+		    },
+		    show:{
+		      autoShow:false,//页面loaded事件发生后自动显示，默认为true
+		      aniShow:'slide-in-right',//页面显示动画，默认为”slide-in-right“；
+		      duration:1000//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+		    }
+		})
+    </script>
+</body>
+</head>
+<body>	
+	
+	<button type="button">关闭</button>
+	this is pages index.html
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+ 		<script>
+			// DOMContentLoaded事件处理
+			var _domReady=false;
+			document.addEventListener('DOMContentLoaded',function(){
+				_domReady=true;
+				compatibleAdjust();
+			},false);
+			// 兼容性样式调整
+			var _adjust=false;
+			function compatibleAdjust(){
+					if(_adjust||!window.plus||!_domReady){
+						return;
+					}
+					_adjust=true;
+					// iOS平台特效
+					if('iOS'==plus.os.name){
+						document.getElementById('content').className='scontent';	// 使用div的滚动条
+						if(navigator.userAgent.indexOf('StreamApp')>=0){	// 在流应用模式下显示返回按钮
+							document.getElementById('back').style.visibility='visible';
+						}
+					}
+			}
+		</script> 
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			 }
+			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+			 #content{position:fixed;top:45px;bottom:45px;width:100%;overflow-y: scroll;}
+			 #footer{position:fixed;bottom:0px;width:100%;height: 45px;}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title mui-text-left"></h1>
+			<a class="mui-icon-contact mui-icon mui-pull-right"></a>
+		</header>
+		<div id="content" class="dcontent" >
+		    <h1>1</h1>
+		    <h1>2</h1>
+		    <h1>3</h1>
+		    <h1>4</h1>
+		    <h1>5</h1>
+		    <h1>6</h1>
+			<p>欢迎进入窗口动画页面1</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<div>footer</div>
+		</div>
+		<footer id="footer">
+			<input type="text" name="" id="" value=""/>
+		</footer>
+		<script src="../js/mui.min.js"></script>
+		<script src="../contronller/config.js"></script>
+		<script src="../contronller/common.js"></script>
+		
+		<script>
+				mui.init({
+					swipeBack: false,
+					keyEventBind: {
+						backbutton: true //关闭back按键监听
+					}
+				});
+				
+				mui.plusReady(function() {
+					 //显示聊天人物
+					 mui('header h1')[0].innerHTML = plus.webview.currentWebview().id;
+					 //显示永远在底部
+					 footer();
+					 function footer(){
+					 	  mui('#content')[0].scrollTop = 10000000000;
+					 	  console.log(mui('#content')[0].scrollTop);
+					 }
+					 //发表输入框获取焦点是操作
+					 function chatInput(){
+					 	   setTimeout(function(){
+					 	   	   footer();
+					 	   },300)
+					 }
+					 mui('#footer input')[0].addEventListener('tap',chatInput,false)
+				});
+		</script>
+
+	</body>
+
+</html>

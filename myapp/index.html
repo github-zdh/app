@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+ 		<script>
+			// DOMContentLoaded事件处理
+			var _domReady=false;
+			document.addEventListener('DOMContentLoaded',function(){
+				_domReady=true;
+				compatibleAdjust();
+			},false);
+			// 兼容性样式调整
+			var _adjust=false;
+			function compatibleAdjust(){
+					if(_adjust||!window.plus||!_domReady){
+						return;
+					}
+					_adjust=true;
+					// iOS平台特效
+					if('iOS'==plus.os.name){
+						document.getElementById('content').className='scontent';	// 使用div的滚动条
+						if(navigator.userAgent.indexOf('StreamApp')>=0){	// 在流应用模式下显示返回按钮
+							document.getElementById('back').style.visibility='visible';
+						}
+					}
+			}
+		</script> 
+		<link rel="stylesheet" href="./css/mui.min.css">
+		<style>
+			.mui-bar{
+			    -webkit-box-shadow: 0 0 1px rgba(0,0,0,.25);
+			    box-shadow: 0 0 1px rgba(0,0,0,.25);
+			}
+			.mui-icon .mui-badge{line-height: 1;padding-top:3px;}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<nav class="mui-bar mui-bar-tab footer-tab">
+			<a class="mui-tab-item mui-active" href="#home" data-wid="./view/home.html"  onclick="updateView()">
+				<span class="mui-icon mui-icon-home"><span class="mui-badge">9</span></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="#mail" data-wid="./view/mail.html">
+				<span class="mui-icon mui-icon mui-icon-personadd"></span>
+				<span class="mui-tab-label">通讯录</span>
+			</a>
+			<a class="mui-tab-item" href="#discover" data-wid="./view/discover.html">
+				<span class="mui-icon mui-icon-navigate"></span>
+				<span class="mui-tab-label">发现</span>
+			</a>
+			<a class="mui-tab-item" href="#member" data-wid="./view/member.html">
+				<span class="mui-icon mui-icon-contact"></span>
+				<span class="mui-tab-label">我</span>
+			</a>
+		</nav>
+		
+		<script src="./js/mui.min.js"></script>
+		<script src="./js/webviewGroup.js"></script>
+		<script src="./contronller/config.js"></script>
+		<script src="./contronller/common.js"></script>
+		
+		<script>
+				mui.init();	
+				var ws=null,wc=null;
+				mui.plusReady(function() {
+					var _self = plus.webview.currentWebview();
+					//触发menu菜单
+					ws=plus.webview.currentWebview();
+					// 用户点击后
+					ws.addEventListener("maskClick",function(){
+						wc.close("auto");
+					},false);
+					//中间滑动部分、嵌套html
+					var group = new webviewGroup(_self.id, {
+						items: [{
+							id: "home",
+							url: "./view/home.html",
+							styles:{
+								  top:'44px',
+								  bottom:'51px'
+							},
+							extras: {}
+						}, {
+							id: "mail",
+							url: "./view/mail.html",
+							styles:{
+								  top:'44px',
+								  bottom:'51px'
+							},
+							extras: {}
+						}, {
+							id: "discover",
+							url: "./view/discover.html",
+							styles:{
+								  top:'44px',
+								  bottom:'51px'
+							},
+							extras: {}
+						}, {
+							id: "member",
+							url: "./view/member.html",
+							styles:{
+								  top:'44px',
+								  bottom:'51px'
+							},
+							extras: {}
+						}],
+						onChange: function(obj) {
+							var c = document.querySelector(".mui-tab-item.mui-active");
+							if(c) {
+								c.classList.remove("mui-active");
+							}
+							var target = document.querySelector(".footer-tab .mui-tab-item:nth-child(" + (parseInt(obj.index) + 1) + ")");
+							target.classList.add("mui-active");
+							if(target.scrollIntoView) {
+								target.scrollIntoView();
+							}
+						}
+					});
+					//点击底部导航对应切换中间页面
+					mui(".footer-tab").on("tap", "a", function(e) {
+						var wid = this.getAttribute("href").split('#')[1];
+						group.switchTab(wid);
+					});
+					// Android处理返回键
+					plus.key.addEventListener('backbutton',function(){
+						('iOS'==plus.os.name)?plus.nativeUI.confirm('确认退出？', function(e){
+							if(e.index>0){
+								plus.runtime.quit();
+							}
+						}, 'HelloH5', ['取消','确定']):(confirm('确认退出？')&&plus.runtime.quit());
+					},false);
+
+				//绘制顶部图标
+				drawTopIcon();
+				function drawTopIcon(){
+							_self = plus.webview.currentWebview();
+							var titleView = _self.getNavigationbar();
+			
+							if(!titleView) {
+								titleView = plus.webview.getLaunchWebview().getNavigationbar();
+							}
+			
+							//绘制左上角menu图标 + 
+							titleView.drawRect("#fff", {
+								top: "21px",
+								height:"2px",
+								right: "12px",
+								width: "20px"
+							}); //绘制底部边线
+							titleView.drawRect("#fff", {
+								top: "12px",
+								height:"20px",
+								right: "21px",
+								width: "2px"
+							}); //绘制底部边线
+			
+
+							//绘制左上角menu图标
+//							var bitmap_menu = new plus.nativeObj.Bitmap("menu");
+//							bitmap_menu.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAKlBMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAABINtoqAAAADHRSTlMA/fPQ0M/e3tzs7OjgY5g4AAAAAWJLR0QAiAUdSAAAAAd0SU1FB+EBFwEbOGGUPSIAAAA2SURBVDjLY2AY9oDxDBZwCJ8EswsW4DrQ/hicgPTQZSvHAioG2h+DE5AeupyrsIDVA+0PqgEAu36BkQX5nBQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDEtMjNUMDE6Mjc6NTYrMDg6MDC8FK1uAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTAxLTIzVDAxOjI3OjU2KzA4OjAwzUkV0gAAAABJRU5ErkJggg==");
+//							titleView.drawBitmap(bitmap_menu, {}, {
+//								top: "10px",
+//								right: "10px",
+//								width: "24px",
+//								height: "24px"
+//							});
+//			
+							var bitmap = new plus.nativeObj.Bitmap("about");
+							titleView.drawText('ZDH',  {left:'10px'}, {
+										top: "10px",
+										left: "10px",
+										width: "24px",
+										height: "24px",
+										align:'left',
+										size:'20px',
+										color:'#fff'
+							});
+			
+							titleView.interceptTouchEvent(true);
+							titleView.addEventListener("click", function(e) {
+								var x = e.clientX;
+//								if(x < 44) { //触发menu菜单
+//									
+//								} else if(x > window.innerWidth - 34 ) { //触发menu菜单
+//									
+//								}
+
+                                if(x > window.innerWidth - 44 ) { //触发menu菜单
+										// 显示侧滑页面(menu菜单)
+										function showTopRightMenu(){
+											// 防止快速点击可能导致多次创建
+											if(wc){
+												return;
+											}
+											// 开启遮罩
+											ws.setStyle({mask:"rgba(0,0,0,0)"});
+											common.topRightMenu.home.styels.top = (plus.navigator.getStatusbarHeight() + 44) +'px';
+											// 创建侧滑页面 
+											wc=plus.webview.create("./view/topRightMenu.html","topRightMenu",common.topRightMenu.home.styels,common.topRightMenu.home.extras);
+											// 侧滑页面关闭后关闭遮罩
+											wc.addEventListener('close',function(){
+												ws.setStyle({mask:"none"});
+												wc=null;
+											},false);
+											
+											// 侧滑页面加载后显示（避免白屏）
+											wc.addEventListener("loaded",function(){
+												wc.show("zoom-fade-out",200);
+											},false);
+										}
+										showTopRightMenu();
+
+								}
+									
+							}, false);
+
+				}
+
+
+				});
+				// mui.back = function() {
+				// 	var _self = plus.webview.currentWebview();
+				// 	_self.close("auto");
+				// }
+		</script>
+
+	</body>
+
+</html>

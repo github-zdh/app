@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>首页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.title {
+				padding: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+				background-color: #fff;
+			}
+			#pullrefresh{overflow-y: scroll;}
+		</style>
+	</head>
+
+	<body>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll" style="overflow: scroll;">
+				<div class="title">
+					这是webview模式选项卡中的第1个子页面
+				</div>
+				
+				<div id="html" style=""></div>
+				
+				
+			</div>
+			
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.md5.js"></script>
+		
+			
+		<script>
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: false //关闭back按键监听
+				}
+			});
+			
+			var _time = new Date().getTime();
+			var _str = '208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6Fpublicnumber/index208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6F'+_time;
+            var _key = md5(_str).toUpperCase();
+			mui.ajax('https://nphapi.igango.com/home/Publicnumber/index',{
+					data:{
+						"key":_key,
+						"time":_time,
+						page:1,
+						page_size:10
+					},	              
+					success:function(data){
+//						alert('success');
+						var data = JSON.parse(data);
+						document.getElementById('html').innerHTML = data.result[0].content;
+					},
+					error:function(xhr,type,errorThrown){
+						//异常处理；
+//						alert(type);
+						console.log(JSON.stringify(xhr))
+					}
+			});
+		</script>
+
+	</body>
+</html>
