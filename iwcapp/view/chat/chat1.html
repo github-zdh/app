@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+		<style>
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			 }
+			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+			 #content{position:fixed;top:45px;bottom:45px;width:100%;overflow-y: scroll;}
+			 #footer{position:fixed;bottom:0px;width:100%;height: 45px;}
+			 
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<div id="copy">
+			<div id="html" style=""></div>
+		    <h1>1</h1>
+		    <h1>2</h1>
+		    <h1>3</h1>
+		    <h1>4</h1>
+		    <h1>5</h1>
+		    <h1>6</h1>
+			<p>欢迎进入窗口动画页面1</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<p>欢迎进入窗口动画页面</p>
+			<br/>
+			<img src="../img/ui.png"/>
+			<br/>
+			<p>此页面已关闭侧滑返回功能</p>
+			<div>footer</div>
+			<div id="chatId">123</div>
+			<div id="buttom"></div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		
+		<script>
+				mui.init({
+					swipeBack: false,
+					keyEventBind: {
+						backbutton: true //关闭back按键监听
+					}
+				});
+				setTimeout(function(){
+					console.log('123')
+					  var chatId = document.createElement('div');
+					  chatId.style.lineHeight='100px';
+					  chatId.innerHTML = 'chatIdchatIdchatId';
+					  document.getElementById('chatId').appendChild(chatId);
+				},1000)
+//			    //关闭等待框
+//			     plus.nativeUI.closeWaiting();
+//			     //显示当前页面
+//			     mui.currentWebview.show();
+//				 //显示聊天人物
+//				 mui('header h1')[0].innerHTML = plus.webview.currentWebview().id;
+//				 mui.scrollTo(100000,300);	
+
+
+			mui.plusReady(function() {
+				// 隐藏滚动条
+				plus.webview.currentWebview().setStyle({scrollIndicator:'none'});
+				//加载动画
+				setTimeout(function(){
+					 plus.nativeUI.showWaiting()
+				},300)
+				
+				_self = plus.webview.currentWebview();
+				var titleView = _self.getNavigationbar();
+				if(!titleView) {
+					titleView = plus.webview.getLaunchWebview().getNavigationbar();
+				}
+				//绘制左上角menu图标 + 
+				titleView.drawRect("#fff", {
+					top: "21px",
+					height:"2px",
+					right: "12px",
+					width: "20px"
+				}); //绘制底部边线
+				titleView.drawRect("#fff", {
+					top: "12px",
+					height:"20px",
+					right: "21px",
+					width: "2px"
+				}); //绘制底部边线
+			
+				
+				var _time = new Date().getTime();
+				var _str = '208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6Fpublicnumber/index208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6F'+_time;
+	            var _key = md5(_str).toUpperCase();
+				mui.ajax('https://nphapi.igango.com/home/Publicnumber/index',{
+						data:{
+							"key":_key,
+							"time":_time,
+							page:1,
+							page_size:10
+						},
+						dataType:'JSON',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						timeout:100000,//超时时间设置为100秒；	              
+						success:function(data){
+	//						alert('success');
+							var data = JSON.parse(data);
+							document.getElementById('html').innerHTML = data.result[0].content;
+							setTimeout(function(){
+								 plus.nativeUI.closeWaiting();
+							},1000)
+						},
+						error:function(xhr,type,errorThrown){
+							//异常处理；
+	//						alert(type);
+							console.log(JSON.stringify(xhr))
+						}
+				});
+
+			})
+		</script>
+
+	</body>
+
+</html>

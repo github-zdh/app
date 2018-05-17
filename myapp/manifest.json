@@ -1,12 +1,12 @@
 {
 	"@platforms": ["android", "iPhone", "iPad"],
 	"id": "H563198D7",/*必选，应用的标识*/
-	"name": "hellomui",/*必选，应用名称*/
+	"name": "myapp",/*必选，应用名称*/
 	"version": {
 		"name": "1.0",/*必选，版本名称*/
 		"code": ""
 	},
-	"description": "",/*可选，应用描述信息*/
+	"description": "模仿微信app",/*可选，应用描述信息*/
 	"icons": {
 		"72": "icon.png"
 	},
@@ -170,7 +170,7 @@
 				}
 			}
 		},
-		"schemeWhitelist":["market"]
+		"schemeWhitelist":["market"],"ads":{"rp":false,"splash":false,"push":false},"adid":""
 	},
 	"dependencies" : {
 		"pages": {

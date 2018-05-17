@@ -1,0 +1,63 @@
+{
+	"index.html": {
+		"resources": [
+			"view/tab-top-subpage-1.html",
+			"view/tab-top-subpage-3.html",
+			"js/mui.min.js",
+			"view/home.html",
+			"view/home/index.html"
+		],
+		"refer": [
+			"view/tab-top-subpage-1.html",
+			"view/tab-top-subpage-2.html",
+			"view/tab-top-subpage-3.html",
+			"view/tab-top-subpage-4.html",
+			"view/side.html",
+			"view/topRightMenu.html",
+			"view/home.html",
+			"view/member.html",
+			"view/mail.html",
+			"view/discover.html",
+			"view/home/index.html",
+			"view/home/discover.html",
+			"view/home/member.html",
+			"view/home/mail.html",
+			"view/home/tr.menu.html"
+		]
+	},
+	"view/home.html": {
+		"refer": [
+			"view/topRightMenu.html",
+			"view/chat.html",
+			"view/index.html"
+		],
+		"resources": []
+	},
+	"view/index.html": {
+		"resources": [
+			"view/chat.html",
+			"view/header.html"
+		],
+		"refer": [
+			"view/chat.html",
+			"view/include/header.html"
+		]
+	},
+	"view/discover.html": {
+		"refer": [
+			"view/chat.html"
+		]
+	},
+	"view/home/index.html": {
+		"refer": [
+			"view/mask.html",
+			"view/chat/chat.html",
+			"view/chat/chat1.html"
+		]
+	},
+	"view/home/discover.html": {
+		"refer": [
+			"view/home/index.html"
+		]
+	}
+}

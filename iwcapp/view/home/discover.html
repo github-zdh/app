@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>发现</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../model/index.css">
+	
+	<script type="text/javascript">
+var ws=null,wn=null;
+// H5 plus事件处理
+function plusReady(){
+	ws=plus.webview.currentWebview();
+	// 预创建新窗口（显示在可视区域外）
+	wn=plus.webview.create('./index.html', 'newdrag',{top:plus.navigator.getStatusbarHeight()+'px',left:'100%',render:'always'});
+	wn.show('none');
+	// 右滑隐藏新窗口
+	wn.drag({direction:'right',moveMode:'followFinger'}, {view:ws,moveMode:'follow'});
+}
+if(window.plus){
+	plusReady();
+}else{
+	document.addEventListener('plusready', plusReady, false);
+}
+// 窗口组合动画
+function webviewAnimation(){
+	plusReady();
+	plus.webview.startAnimation({view:ws,styles:{fromLeft:'0%',toLeft:'0%'},action:'none'},
+	{view:wn,styles:{fromLeft:'100%',toLeft:'0%'},action:'none'});
+}
+	</script>
+	</head>
+	<body>
+		<br/><br/>
+		<button class="mui-btn mui-btn-primary" onclick="webviewAnimation()">窗口组合动画显示新窗口</button>
+		<br/><br/>
+		在新窗口中可以右滑返回（新窗口移动到屏幕外）
+	</body>
+</html>

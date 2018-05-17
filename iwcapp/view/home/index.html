@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>首页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../model/index.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.title {
+				padding: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+				background-color: #fff;
+			}
+			#pullrefresh{overflow-y: scroll;}
+			/*-------------------*/
+             .homeList ul li a{position: relative;display: block;background: #fff;}
+             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+             .homeList ul li a .userImg,.homeList ul li a .time{width: 44px;height: 44px;overflow: hidden;position: absolute;top:7px;left:10px;border-radius: 3px;}
+             .homeList ul li a .msg{position:absolute;top:3px;left:54px;z-index:1000;font-size: 10px;color:#fff;}
+             .homeList ul li a .msg .mui-badge{line-height: 1;padding-top:3px;}
+             .homeList ul li a .content{padding:7px 70px 7px 65px;}
+             .homeList ul li a h1,.homeList ul li a p{overflow: hidden;text-overflow: ellipsis;white-space:nowrap;}
+             .homeList ul li a h1{font-size: 16px;color:#333;line-height: 24px;}
+             .homeList ul li a p,.homeList ul li a .time{font-size: 12px;color:#999;}
+             .homeList ul li a div.time{width: 55px;right: 10px;left:auto;font-size:11px;text-align:right;}
+             .homeList ul li a .time span{font-size: 24px;color:#ccc;}
+		</style>
+		<script src="../../socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+		   var about = io.connect('http://localhost:3000/about');  
+		   console.log(about);
+		   about.on('msg', function (data) {
+		         console.log(data);
+		   });
+		   about.emit('about event', {"event":'this is my about event'});
+
+		</script>
+	</head>
+
+	<body>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+                <section class="homeList">
+                      <ul id="create">
+                      	   <li>
+                      	         <a href="#chat_1" data-wid="./chat.html" data-view="../chat/chat.html?room=x9osELOIMND5-M7RAAAC"  id="aid">
+                                       <div class="userImg">
+                                              <img src="https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4">
+                                       </div>
+                                       <div class="msg mui-icon">
+                                         	<span class="mui-badge">9</span>
+                                       </div>
+                                       <div class="content">
+                                             <h1>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</h1>
+                                             <p>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</p>
+                                       </div>
+                                       <div class="time">
+                                             <div>下午15:30</div>
+                                             <span class="mui-icon mui-icon-home"></span>
+                                       </div>
+                      	         </a>
+                      	   </li>
+                      	   <li>
+                      	         <a href="#chat_1" data-wid="./chat.html" data-view="../chat/chat.html?room=x9osELOIMND5"  id="aid">
+                                       <div class="userImg">
+                                              <img src="https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4">
+                                       </div>
+                                       <div class="msg mui-icon">
+                                         	<span class="mui-badge">9</span>
+                                       </div>
+                                       <div class="content">
+                                             <h1>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</h1>
+                                             <p>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</p>
+                                       </div>
+                                       <div class="time">
+                                             <div>下午15:30</div>
+                                             <span class="mui-icon mui-icon-home"></span>
+                                       </div>
+                      	         </a>
+                      	   </li>      	  
+                      </ul>
+				 </section>	
+				 
+				 <section id="mnp">
+				 	  <button  type="button" class="mui-btn mui-btn-primary" style="width: 100%;margin-top:30px;">创建新页面</button>
+				 </section>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		<style type="text/css">
+			.mui-backdrop {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.3);}
+		</style>
+		<script>
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: false //关闭back按键监听
+				}
+			});
+			
+
+
+//			var view = new plus.nativeObj.View(id, styles, tags);
+			
+			mui("#mnp").on("tap", "button", function(e) {
+		            // 创建view
+					plus.nativeUI.showWaiting(" ",{back:"none",color:"#FF0000",background:"rgba(0,0,0,0)",loading:{display:"none"}});
+					mui.openWindow({
+						  url: '../chat/chat1.html',
+						  id: 'chat1.html',
+						  styles: {                             // 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
+						    titleNView: {                       // 窗口的标题栏控件
+						      titleText:"标题栏",                // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
+						      autoBackButton:true,
+						      titleColor:"#ffffff",             // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
+						      titleSize:"17px",                 // 字体大小,默认17px
+						      backgroundColor:"#000000",        // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
+						      progress:{                        // 标题栏控件的进度条样式
+						        color:"#00FF00",                // 进度条颜色,默认值为"#00FF00"  
+						        height:"2px"                    // 进度条高度,默认值为"2px"         
+						      },
+						      splitLine:{                       // 标题栏控件的底部分割线，类似borderBottom
+						        color:"#CCCCCC",                // 分割线颜色,默认值为"#CCCCCC"  
+						        height:"1px"                    // 分割线高度,默认值为"2px"
+						      },
+//						      back:{//左上角返回箭头
+//							        image:{//图片格式
+//							            base64Data:''//加载图片的Base64编码格式数据 base64Data 和 imgSRC 必须指定一个.否则不显示返回箭头
+//							        }
+//							  }
+						    }
+						  },
+						  show:{
+						  	  autoShow:false,//页面loaded事件发生后自动显示，默认为true
+						  	  aniShow:'pop-in',
+						      duration:200//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+						  },
+						  waiting:{
+						      autoShow:false,//自动显示等待框，默认为true
+						  }
+					});
+					plus.webview.hide('chat1.html');
+					setTimeout(function(){
+						plus.webview.show('chat1.html','pop-in',200);
+					},300)
+			});
+
+
+
+
+			  mui.plusReady(function(){
+					//点击对应聊天显示聊天界面
+					mui("body").on("tap", "a", function(e) {
+		                   var _this = this;
+		                   view.openWindow(_this);
+					});
+			  });
+		</script>
+
+	</body>
+</html>

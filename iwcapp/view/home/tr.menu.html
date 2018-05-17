@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="MobileOptimized" content="320"/>
+		<title>顶部右边menu菜单导航</title>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+	</head>
+	<body>
+		<div id="topBox"></div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../contronller/topRightMenu.js"></script>
+		<script type="text/javascript">
+//				new topRightMenu({
+//					  el:'topBox',//ID
+//					  list:[
+//								   {
+//									   title:'home',
+//									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+//									   click:function(){
+//									   	    alert('home');
+//									   }
+//								   },
+//								   {
+//									   title:'second',
+//									   icon:'mui-icon mui-icon-home',
+//									   click:function(){
+//									   	    alert('second');
+//									   }
+//								   },
+//								   {
+//									   title:'thrid',
+//									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+//									   click:function(){
+//									   	    alert('thrid');
+//									   }
+//								   }
+//							]
+//				});
+			mui.plusReady(function() {
+	            var list = [];
+	            var menu = plus.webview.currentWebview().menu;
+	            //var _height = (50 * 3 + 30)+'px';//高*个数+box(padding)//侧滑页面高度（默认100%）
+	            // 如果增加/减少list - 》json 数据得去config配置文件修改topRightMenu
+	            switch(menu){
+	            	case 'home':// 首页    heigth : _height
+						  list=[
+								   {
+									   title:'home',
+									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+									   click:function(){
+									   	    alert('home');
+									   }
+								   },
+								   {
+									   title:'second',
+									   icon:'mui-icon mui-icon-home',
+									   click:function(){
+									   	    alert('second');
+									   }
+								   },
+								   {
+									   title:'thrid',
+									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+									   click:function(){
+									   	    alert('thrid');
+									   }
+								   },
+								   {
+									   title:'second',
+									   icon:'mui-icon mui-icon-home',
+									   click:function(){
+									   	    alert('second');
+									   }
+								   },
+								   {
+									   title:'thrid',
+									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+									   click:function(){
+									   	    alert('thrid');
+									   }
+								   }
+							]
+	            	break;
+	            }
+				new topRightMenu({
+					  el:'topBox',//ID
+					  list:list
+				});
+			})
+		</script>
+	</body>
+</html>

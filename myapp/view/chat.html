@@ -48,7 +48,8 @@
 			<h1 class="mui-title mui-text-left"></h1>
 			<a class="mui-icon-contact mui-icon mui-pull-right"></a>
 		</header>
-		<div id="content" class="dcontent" >
+		<div id="content"></div>
+		<div id="copy" style="display: none;" >
 		    <h1>1</h1>
 		    <h1>2</h1>
 		    <h1>3</h1>
@@ -134,8 +135,8 @@
 					 //发表输入框获取焦点是操作
 					 function chatInput(){
 					 	   setTimeout(function(){
-					 	   	   footer();
-					 	   },300)
+					 	   	   document.getElementById('content').innerHTML = document.getElementById('copy').innerHTML;
+					 	   },1000)
 					 }
 					 mui('#footer input')[0].addEventListener('tap',chatInput,false)
 				});
