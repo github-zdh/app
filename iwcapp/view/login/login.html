@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style type="text/css">
+			   .mui-input-group:after,.mui-input-group:before{background: none;}
+			   body header{display: none;}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<div id="openWindow">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title mui-text-left"></h1>
+				<a class="mui-icon-contact mui-icon mui-pull-right"></a>
+			</header>
+		</div>
+        <div id="" style="position: fixed;top:50%;left: 5%;width: 90%;margin-top:-100px;border-radius: 5px;overflow: hidden;">
+			<form class="mui-input-group" style="padding-top:15px;padding-bottom: 15px;">
+			    <div class="mui-input-row">
+			        <label>邮箱</label>
+			    <input type="text" class="mui-input-clear" placeholder="请输入邮箱" id="email">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>密码</label>
+			        <input type="password" class="mui-input-password" placeholder="请输入密码" id="password">
+			    </div>
+			    <div class="mui-button-row" style="font-size: 0;margin-top:15px;">
+			        <button type="button" class="mui-btn mui-btn-primary" id="submit" style="width: 45%;margin-left:3%">确认</button>
+			        <button type="button" class="mui-btn mui-btn-danger" id="close" style="width: 45%;margin-left:3%">取消</button>
+			    </div>
+			</form>
+        </div>
+         
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		<script src="../../contronller/back.js"></script>
+		
+		<script>
+				
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: true //关闭back按键监听
+				}
+			});
+//				document.getElementById('submit').addEventListener('click',function(){
+//					    mui.ajax({
+//					    	url:'http://114.115.137.212/app/login/login',
+//					    	type:'post',
+//					    	data:{
+//					    		email:document.getElementById('email').value,
+//					    		password:document.getElementById('password').value
+//					    	},
+//					    	success:function(data){
+//					    		mui.toast(data.msg);
+//					    		if(data.code==200){
+//					    			setTimeout(function(){
+//						    			localStorage.setItem('userInfo',JSON.stringify(data.result));
+//						    			view.openWindow({view:'../../index.html',wid:'./index.html'});
+//					    			},2000)
+//					    		}
+//					    	},
+//					    	error:function(err){
+//					    		console.log(err);
+//					    		mui.toast('连接服务器失败')
+//					    	}
+//					    })
+//				},false)
+
+			mui.plusReady(function() {
+//				window.muiBack = false;
+				mui.back = muiBack.loginBack;
+
+				document.getElementById('close').addEventListener('click',function(){
+                        mui.back()
+				},false)
+				document.getElementById('submit').addEventListener('click',function(){
+					    console.log(JSON.stringify(plus.webview.currentWebview().id))
+//					    view.openWindow({view:'../../index.html',wid:'./index.html'});
+					    mui.ajax({
+					    	url:'http://114.115.137.212/app/login/login',
+					    	type:'post',
+					    	data:{
+//					    		email:'2056401340@qq.com',
+//					    		password:123456
+					    		email:document.getElementById('email').value,
+					    		password:document.getElementById('password').value
+					    	},
+					    	success:function(data){
+					    		mui.toast(data.msg);
+					    		if(data.code==200){
+					    			setTimeout(function(){
+						    			localStorage.setItem('userInfo',JSON.stringify(data.result));
+						    			view.openWindow({view:'../../index.html',wid:'./index.html'});
+					    			},1000)
+					    		}
+					    	},
+					    	error:function(err){
+					    		console.log(err);
+					    		mui.toast('连接服务器失败')
+					    	}
+					    })
+				},false)
+				
+//				mui.alert(window.location.href);
+                 
+                // 监听网络状态
+				//plus.networkinfo.getCurrentType();
+				//CONNECTION_UNKNOW: 网络状态常量，表示当前设备网络状态未知，固定值为0。
+				//CONNECTION_NONE: 网络状态常量，当前设备网络未连接网络，固定值为1。
+				//CONNECTION_ETHERNET: 网络状态常量，当前设备连接到有线网络，固定值为2。
+				//CONNECTION_WIFI: 网络状态常量，当前设备连接到无线WIFI网络，固定值为3。
+				//CONNECTION_CELL2G: 网络状态常量，当前设备连接到蜂窝移动2G网络，固定值为4。
+				//CONNECTION_CELL3G: 网络状态常量，当前设备连接到蜂窝移动3G网络，固定值为5。
+				//CONNECTION_CELL4G: 网络状态常量，当前设备连接到蜂窝移动4G网络，固定值为6。
+               document.addEventListener("netchange",function(){
+				        var nt = plus.networkinfo.getCurrentType();
+				        switch ( nt ) {
+				            case plus.networkinfo.CONNECTION_ETHERNET:
+				            case plus.networkinfo.CONNECTION_WIFI:
+//				            alert("切换到wifi!"); 
+				            break; 
+				            case plus.networkinfo.CONNECTION_CELL2G:
+//				            alert("切换到2G网络!"); 
+				            break; 
+				            case plus.networkinfo.CONNECTION_CELL3G:
+//				            alert("切换到3G网络!"); 
+				            break; 
+				            case plus.networkinfo.CONNECTION_CELL4G:
+//				            alert("切换到4G网络!"); 
+				            break; 
+				            default:
+				            alert("无网络!"); 
+				            break;
+				        }
+                })
+			})
+		</script>
+
+	</body>
+</html>

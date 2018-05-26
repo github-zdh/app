@@ -34,7 +34,8 @@
              .homeList ul li a div.time{width: 55px;right: 10px;left:auto;font-size:11px;text-align:right;}
              .homeList ul li a .time span{font-size: 24px;color:#ccc;}
 		</style>
-		<script src="../../socket.io/socket.io.js"></script>
+		
+		<!--<script src="../../socket.io/socket.io.js"></script>
 		<script type="text/javascript">
 		   var about = io.connect('http://localhost:3000/about');  
 		   console.log(about);
@@ -43,63 +44,41 @@
 		   });
 		   about.emit('about event', {"event":'this is my about event'});
 
-		</script>
+		</script>-->
 	</head>
 
 	<body>
-		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-			<div class="mui-scroll">
+		<div id="room">
                 <section class="homeList">
                       <ul id="create">
-                      	   <li>
-                      	         <a href="#chat_1" data-wid="./chat.html" data-view="../chat/chat.html?room=x9osELOIMND5-M7RAAAC"  id="aid">
+                      	   <li v-for="item in items">
+                      	         <a data-wid="./chat.html" :data-view="'../chat/chat.html?room='+item.rid+'&uid='+item.uid">
                                        <div class="userImg">
-                                              <img src="https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4">
+                                              <img v-bind:src="item.userImg">
                                        </div>
                                        <div class="msg mui-icon">
-                                         	<span class="mui-badge">9</span>
+                                         	<span class="mui-badge">{{item.badge}}</span>
                                        </div>
                                        <div class="content">
-                                             <h1>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</h1>
-                                             <p>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</p>
+                                             <h1>{{item.title}}room={{item.rid}}&uid={{item.uid}}</h1>
+                                             <p>{{item.stitle}}</p>
                                        </div>
                                        <div class="time">
-                                             <div>下午15:30</div>
-                                             <span class="mui-icon mui-icon-home"></span>
+                                             <div>{{item.time}}</div>
+                                             <span class="mui-icon mui-icon-home" v-if="item.shield"></span>
                                        </div>
                       	         </a>
                       	   </li>
-                      	   <li>
-                      	         <a href="#chat_1" data-wid="./chat.html" data-view="../chat/chat.html?room=x9osELOIMND5"  id="aid">
-                                       <div class="userImg">
-                                              <img src="https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4">
-                                       </div>
-                                       <div class="msg mui-icon">
-                                         	<span class="mui-badge">9</span>
-                                       </div>
-                                       <div class="content">
-                                             <h1>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</h1>
-                                             <p>首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</p>
-                                       </div>
-                                       <div class="time">
-                                             <div>下午15:30</div>
-                                             <span class="mui-icon mui-icon-home"></span>
-                                       </div>
-                      	         </a>
-                      	   </li>      	  
-                      </ul>
+                      	   
+                     </ul>
 				 </section>	
-				 
-				 <section id="mnp">
-				 	  <button  type="button" class="mui-btn mui-btn-primary" style="width: 100%;margin-top:30px;">创建新页面</button>
-				 </section>
-			</div>
 		</div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/mui.md5.js"></script>
 		<script src="../../contronller/config.js"></script>
 		<script src="../../contronller/common.js"></script>
 		<script src="../../contronller/createView.js"></script>
+		<script src="../../contronller/vue.js"></script>
 		<style type="text/css">
 			.mui-backdrop {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.3);}
 		</style>
@@ -110,65 +89,79 @@
 					backbutton: false //关闭back按键监听
 				}
 			});
-			
-
-
+//			console.log('config.userInfo.id----------------------------------'+config.userInfo.id);
+//		    mui.ajax({
+//			    	url:config.host+'/app/search/mail',
+//			    	type:'post',
+//			    	data:{
+//			    		uid:config.userInfo.id
+//			    	},
+//			    	success:function(data){
+//			    		mui.toast(data.msg);
+//			    		console.log(JSON.stringify(data))								    		
+//			    	},
+//			    	error:function(err){
+//			    		console.log(err);
+//			    		mui.toast('连接服务器失败')
+//			    	}
+//		    })
 //			var view = new plus.nativeObj.View(id, styles, tags);
-			
-			mui("#mnp").on("tap", "button", function(e) {
-		            // 创建view
-					plus.nativeUI.showWaiting(" ",{back:"none",color:"#FF0000",background:"rgba(0,0,0,0)",loading:{display:"none"}});
-					mui.openWindow({
-						  url: '../chat/chat1.html',
-						  id: 'chat1.html',
-						  styles: {                             // 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
-						    titleNView: {                       // 窗口的标题栏控件
-						      titleText:"标题栏",                // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
-						      autoBackButton:true,
-						      titleColor:"#ffffff",             // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
-						      titleSize:"17px",                 // 字体大小,默认17px
-						      backgroundColor:"#000000",        // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
-						      progress:{                        // 标题栏控件的进度条样式
-						        color:"#00FF00",                // 进度条颜色,默认值为"#00FF00"  
-						        height:"2px"                    // 进度条高度,默认值为"2px"         
-						      },
-						      splitLine:{                       // 标题栏控件的底部分割线，类似borderBottom
-						        color:"#CCCCCC",                // 分割线颜色,默认值为"#CCCCCC"  
-						        height:"1px"                    // 分割线高度,默认值为"2px"
-						      },
-//						      back:{//左上角返回箭头
-//							        image:{//图片格式
-//							            base64Data:''//加载图片的Base64编码格式数据 base64Data 和 imgSRC 必须指定一个.否则不显示返回箭头
-//							        }
-//							  }
-						    }
-						  },
-						  show:{
-						  	  autoShow:false,//页面loaded事件发生后自动显示，默认为true
-						  	  aniShow:'pop-in',
-						      duration:200//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-						  },
-						  waiting:{
-						      autoShow:false,//自动显示等待框，默认为true
-						  }
-					});
-					plus.webview.hide('chat1.html');
-					setTimeout(function(){
-						plus.webview.show('chat1.html','pop-in',200);
-					},300)
-			});
-
-
-
-
-			  mui.plusReady(function(){
+		mui.plusReady(function() {
 					//点击对应聊天显示聊天界面
 					mui("body").on("tap", "a", function(e) {
 		                   var _this = this;
 		                   view.openWindow(_this);
-					});
+					});					
+					//引入vue
+					new Vue({
+                        el:"#room",
+					    data:function(){
+					    	 return {
+					    	 	  items : [
+					    	 	        {
+					    	 	        	rid:1,
+					    	 	        	uid:1,
+					    	 	        	badge:1,//（数字角标）
+					    	 	        	shield:true,//屏蔽
+					    	 	        	time:'下午 15:30',
+					    	 	        	title:'首页',
+					    	 	        	stitle:'首页首页首页首页首页首页首页首页',
+					    	 	        	userImg:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4'
+					    	 	        },
+					    	 	        {
+					    	 	        	rid:1,
+					    	 	        	uid:2,
+					    	 	        	badge:2,
+					    	 	        	shield:false,
+					    	 	        	time:'下午 15:30',
+					    	 	        	title:'首页',
+					    	 	        	stitle:'首页首页首页首页首页首页首页首页',
+					    	 	        	userImg:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4'
+					    	 	        }
+					    	 	  ]
+					    	 }
+					    },
+					    beforeCreate:function(){
+							    mui.ajax({
+								    	url:config.host+'/app/search/mail',
+								    	type:'post',
+								    	data:{
+								    		uid:config.userInfo.id
+								    	},
+								    	success:function(data){
+								    		mui.toast(data.msg);
+								    		console.log(JSON.stringify(data))								    		
+								    	},
+								    	error:function(err){
+								    		console.log(err);
+								    		mui.toast('连接服务器失败')
+								    	}
+							    })
+					    }
+					})
 			  });
 		</script>
+		
 
 	</body>
 </html>

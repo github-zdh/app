@@ -10,52 +10,33 @@
 	</head>
 	<body>
 		<div id="topBox"></div>
-		<script src="../js/mui.min.js"></script>
-		<script src="../contronller/topRightMenu.js"></script>
+		
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/topRightMenu.js"></script>
+		<script src="../../contronller/createView.js"></script>
 		<script type="text/javascript">
-//				new topRightMenu({
-//					  el:'topBox',//ID
-//					  list:[
-//								   {
-//									   title:'home',
-//									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
-//									   click:function(){
-//									   	    alert('home');
-//									   }
-//								   },
-//								   {
-//									   title:'second',
-//									   icon:'mui-icon mui-icon-home',
-//									   click:function(){
-//									   	    alert('second');
-//									   }
-//								   },
-//								   {
-//									   title:'thrid',
-//									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
-//									   click:function(){
-//									   	    alert('thrid');
-//									   }
-//								   }
-//							]
-//				});
 			mui.plusReady(function() {
 	            var list = [];
 	            var menu = plus.webview.currentWebview().menu;
+	            
 	            //var _height = (50 * 3 + 30)+'px';//高*个数+box(padding)//侧滑页面高度（默认100%）
 	            // 如果增加/减少list - 》json 数据得去config配置文件修改topRightMenu
 	            switch(menu){
 	            	case 'home':// 首页    heigth : _height
 						  list=[
 								   {
-									   title:'home',
-									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
-									   click:function(){
-									   	    alert('home');
+									   title:'添加好友',
+									   img:'../../images/60x60.gif',//img/icon二选一
+									   click:function(){									   	    
+									   	    setTimeout(function(){
+									   	    	 plus.webview.getWebviewById('./index.html').setStyle({mask:"none"})
+									   	    	 plus.webview.currentWebview().hide();
+									   	    },100)
+									   	    view.openWindow({view:'../add/friends.html',wid:'../add/friends.html',delay:500});
 									   }
 								   },
 								   {
-									   title:'second',
+									   title:'',
 									   icon:'mui-icon mui-icon-home',
 									   click:function(){
 									   	    alert('second');
@@ -63,7 +44,7 @@
 								   },
 								   {
 									   title:'thrid',
-									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+									   img:'../../images/60x60.gif',//img/icon二选一
 									   click:function(){
 									   	    alert('thrid');
 									   }
@@ -77,7 +58,7 @@
 								   },
 								   {
 									   title:'thrid',
-									   img:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4',//img/icon二选一
+									   img:'../../images/60x60.gif',//img/icon二选一
 									   click:function(){
 									   	    alert('thrid');
 									   }

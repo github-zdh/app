@@ -1,2 +1,2 @@
-#openWindow{background: #000000;position: fixed;top:0;left: 0;width: 100%;padding-top:20px;}
+#openWindow{background: #000000;position: fixed;top:0;left: 0;width: 100%;padding-top:20px;z-index: 900;}
 #openWindow .mui-bar{top:20px;}

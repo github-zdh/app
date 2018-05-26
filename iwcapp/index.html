@@ -9,7 +9,15 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
  		<script src="./contronller/init.js"></script> 		
 		<link rel="stylesheet" href="./css/mui.min.css">
+		<link rel="stylesheet" href="./css/style.css">
+		<link rel="stylesheet" href="./css/index.css">
 		<style>
+			.mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			 }
+			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon,#openWindow .mui-pull-left{color: #fff;}
+			 #openWindow .mui-pull-left{line-height: 44px;font-size: 20px;}
 			.mui-bar{
 			    -webkit-box-shadow: 0 0 1px rgba(0,0,0,.25);
 			    box-shadow: 0 0 1px rgba(0,0,0,.25);
@@ -17,15 +25,22 @@
 			.mui-icon .mui-badge{line-height: 1;padding-top:3px;}
 		</style>
 		<script>
-			var userInfo = {
-				user_name : 'zdh',
-				user_id : 1
-			}
-			localStorage.setItem('userInfo',JSON.stringify(userInfo))
+//			var userInfo = {
+//				user_name : 'zdh',
+//				user_id : 1
+//			}
+//			localStorage.setItem('userInfo',JSON.stringify(userInfo))
 		</script>
 	</head>
 
 	<body onselectstart="return false;">
+		<div id="openWindow">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-pull-left">ZDH</a>
+				<h1 class="mui-title mui-text-left"></h1>
+				<span class="mui-icon-contact mui-icon mui-pull-right"></span>
+			</header>
+		</div>
 		<nav class="mui-bar mui-bar-tab footer-tab">
 			<a class="mui-tab-item mui-active" href="#home" data-wid="./view/home/index.html"  onclick="updateView()">
 				<span class="mui-icon mui-icon-home"><span class="mui-badge">9</span></span>
@@ -43,20 +58,32 @@
 				<span class="mui-icon mui-icon-contact"></span>
 				<span class="mui-tab-label">我</span>
 			</a>
-		</nav>
-		
+		</nav>				
 		<script src="./js/mui.min.js"></script>
 		<script src="./js/webviewGroup.js"></script>
 		<script src="./contronller/config.js"></script>
 		<script src="./contronller/common.js"></script>
+		<script src="./contronller/createView.js"></script>
+		<script src="./contronller/back.js"></script>
 		
-		<script>
+		<script>				
 				mui.init();	
+
 				var ws=null,wc=null;
 				mui.plusReady(function() {
+//					localStorage.removeItem('userInfo');
+					
+//					alert(JSON.stringify(config))
+					
+					
+					mui.back = muiBack.indexBack;
+					
+
 					var _self = plus.webview.currentWebview();
+                    console.log(_self.id=='./index.html')
 					//触发menu菜单
 					ws=plus.webview.currentWebview();
+					ws.riginMenu = true;
 					// 用户点击后
 					ws.addEventListener("maskClick",function(){
 						wc.close("pop-in");
@@ -67,7 +94,7 @@
 							id: "home",
 							url: "./view/home/index.html",
 							styles:{
-								  top:'44px',
+								  top:view.headerHeight +'px',
 								  bottom:'51px'
 							},
 							extras: {}
@@ -75,7 +102,7 @@
 							id: "mail",
 							url: "./view/home/mail.html",
 							styles:{
-								  top:'44px',
+								  top:view.headerHeight +'px',
 								  bottom:'51px'
 							},
 							extras: {}
@@ -83,7 +110,7 @@
 							id: "discover",
 							url: "./view/home/discover.html",
 							styles:{
-								  top:'44px',
+								  top:view.headerHeight +'px',
 								  bottom:'51px'
 							},
 							extras: {}
@@ -91,7 +118,7 @@
 							id: "member",
 							url: "./view/home/member.html",
 							styles:{
-								  top:'44px',
+								  top:view.headerHeight +'px',
 								  bottom:'51px'
 							},
 							extras: {}
@@ -113,6 +140,40 @@
 						var wid = this.getAttribute("href").split('#')[1];
 						group.switchTab(wid);
 					});
+					//点击右上角菜单
+					mui("#openWindow header").on("tap", "span", function(e) {
+						// 防止快速点击可能导致多次创建
+						var isTap = true;
+						plus.nativeUI.closeWaiting();
+						var wcWaiting = plus.nativeUI.showWaiting("123456",{back:"none",background:"rgba(0,0,0,0.7)",loading:{display:"none"}});
+
+						// 开启遮罩 /否则点击旁边不能关闭右角菜单
+						ws.setStyle({mask:"rgba(0,0,0,0.5)"});
+						common.topRightMenu.home.styels.top = (plus.navigator.getStatusbarHeight() + 44) +'px';
+						// 创建侧滑页面 
+						wc=plus.webview.create("./view/home/tr.menu.html","tr.menu.html",common.topRightMenu.home.styels,common.topRightMenu.home.extras);
+						// 侧滑页面关闭后关闭遮罩
+						wc.addEventListener('close',function(){
+							ws.setStyle({mask:"none"});
+						},false);
+						// 侧滑页面加载后显示（避免白屏）
+						wc.addEventListener("loaded",function(){
+							isTap = false;
+							wc.show("zoom-fade-in",200);
+							var wcCloseWaiting = setTimeout(function(){
+								wcWaiting.close();
+								clearTimeout(wcCloseWaiting);
+								clearTimeout(isTapTimeout);
+							},300)							
+						},false);
+						var isTapTimeout = setTimeout(function(){
+							  if(isTap){
+									wcWaiting.close();
+									clearTimeout(isTapTimeout);
+							  }
+						},1000)
+					});
+					
 					// Android处理返回键
 					// plus.key.addEventListener('backbutton',function(){
 					// 	('iOS'==plus.os.name)?plus.nativeUI.confirm('确认退出？', function(e){
@@ -123,7 +184,7 @@
 					// },false);
 
 				//绘制顶部图标
-				drawTopIcon();
+//				drawTopIcon();
 				function drawTopIcon(){
 							_self = plus.webview.currentWebview();
 							var titleView = _self.getNavigationbar();
@@ -207,14 +268,36 @@
 
 				}
 
-
 				});
 				// mui.back = function() {
 				// 	var _self = plus.webview.currentWebview();
 				// 	_self.close("auto");
 				// }
-		</script>
-
+		</script>    
+		         
+        <!--通知栏-->
+        <script type="text/javascript">
+//      	 mui.plusReady(function(){   
+//			       plus.push.createMessage( '哈哈哈哈哈哈2',{page:'./view/demo/previewImage.html'},{
+//			              title: 'data.title',
+//			              sound: 'none',
+//			              cover: true,
+//			              when: '2018/5/23'
+//			       });
+//			       
+			        //APP还没有退出
+//					plus.push.addEventListener( "click", function( pushInfo ) {
+//						console.log(JSON.stringify(pushInfo))
+//						view.openWindow({view:pushInfo.payload.page,wid:pushInfo.payload.page})
+//					}, false );
+					//APP已经关闭退出
+					//启动APP 并跳转到特定页面
+//					plus.push.addEventListener( "receive", function( pushInfo ) {
+//						console.log(pushInfo.payload.page)
+//						view.openWindow({view:pushInfo.payload.page,wid:pushInfo.payload.page})
+//					}, false );
+//           })
+        </script>
 	</body>
 
 </html>

@@ -1,8 +1,12 @@
 /*
     公共文件/公共配置
  */
-var common = {};
-(function(w,_this){
+//用户信息
+window.userInfo = JSON.parse(localStorage.getItem('userInfo'));	
+
+(function(w){
+    window.common = {};
+    var _this = window.common;
     //顶部右边menu菜单导航
     _this.topRightMenu = {
 	      home:{
@@ -35,4 +39,5 @@ var common = {};
 		    _this.isCeateView=true;
 		    return true;
     }
-})(window,common)
+    
+})(window)

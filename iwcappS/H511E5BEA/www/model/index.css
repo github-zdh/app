@@ -1,0 +1,15 @@
+/*
+ *这是单独为hello mui准备的个性化css，可以覆盖标准mui的css定义；
+ * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
+ * 
+ * */
+html,body,h1,h2,h3,h4,h5,h6,div,strong,ul,ol,li,p,img,span,i,u,em,a,dl,dt,dd,button,b,hr{margin:0;padding:0;}
+img{vertical-align: bottom;}
+em,i,b{font-style: normal;}
+h1,h2,h3,h4,h5,h6{font-weight: normal;}
+ul,ol,li{list-style-type: none;}
+a{text-decoration:none;}
+input,a,img,textarea,button{outline: none;}
+input:hover{outline: none;}
+textarea:focus{background: #fff;border:1px solid #00CC33;}
+strong,b{font-weight: normal;}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>发现</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../model/index.css">
+		<script src="../../contronller/init.js"></script>
+	</head>
+	<body>
+
+	</body>
+			<script src="../../js/mui.min.js"></script>
+			<script src="../../js/mui.md5.js"></script>
+			<script src="../../contronller/config.js"></script>
+			<script src="../../contronller/common.js"></script>
+			<script src="../../contronller/createView.js"></script>
+			<style type="text/css">
+				.mui-backdrop {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.3);}
+			</style>
+			<script>
+						
+						mui.init({
+							swipeBack: false,
+							keyEventBind: {
+								backbutton: true //关闭back按键监听
+							},
+						    subpages:[{
+							      url:'http://114.115.137.212',//子页面HTML地址，支持本地地址和网络地址
+							      id:'http://114.115.137.212',//子页面标志
+							      styles:{
+							        top:64//子页面顶部位置
+							      }
+						    }]
+						});
+						mui.plusReady(function(){
+							plus.nativeUI.showWaiting("  加 载 中 . . .   ",{back:"none",color:"#ffffff",background:"rgba(0,0,0,0.7)",loading:{display:"inline"}});
+							setTimeout(function(){
+								 plus.nativeUI.closeWaiting();
+							},3000)							
+						})
+						
+			</script>
+</html>

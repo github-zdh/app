@@ -8,154 +8,100 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../model/index.css">
 		<style>
 			html,
 			body {
 				background-color: #efeff4;
 			}
 			
-			.title {
-				padding: 20px 15px 10px;
-				color: #6d6d72;
-				font-size: 15px;
-				background-color: #fff;
-			}
+			/*-------------------*/
+             .homeList ul li a{position: relative;display: block;background: #fff;}
+             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+             .homeList ul li a .userImg{width: 36px;height: 36px;overflow: hidden;position: absolute;top:7px;left:10px;border-radius: 3px;}
+             .homeList ul li a .content{padding:7px 7px 7px 65px;}
+             .homeList ul li a h1{font-size: 16px;color:#333;line-height: 36px;}
+
 		</style>
 	</head>
 
 	<body>
-		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-			<div class="mui-scroll">
-					这是webview模式选项卡中的第2个子页面，该页面展示一个支持上拉加载的消息列表
-					<div id="html" style=""></div>
-				<ul class="mui-table-view mui-table-view-chevron">
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 1</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 2</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 3</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 4</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 5</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 6</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 7</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 8</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 9</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 10</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 11</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 12</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 13</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 14</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 15</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 16</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 17</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 18</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 19</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a href="" class="mui-navigate-right">热点-Item 20</a>
-					</li>
-				</ul>
-			</div>
-		</div>
+        <section class="homeList">
+              <div id="newFriends" style="padding:30px 0;">
+					<ul>
+						<li>
+							<a href="#chat_1" data-wid="./newfriends.html" data-view="../add/newfriends.html" class="mui-clearfix">
+								<div class="userImg">
+									<img src="http://127.0.0.1:80/upload/user_img/admin/OsPVmoBSK9WM6eGfBxzB48vp.gif" width="100%" height="100%">
+								</div>
+								<div class="content">
+									<h1 class="mui-ellipsis">新朋友</h1>
+								</div>
+							</a>
+						</li>
+					</ul>
+              </div>
+              <ul id="mail"></ul>
+              <div id="noFriends" class="mui-text-center" style="padding:30px 0;color:#999999;display: none;">
+              	  还有没有好友？<br/>
+              	 <a style="display: inline-block;margin-top:10px;" data-wid="../add/friends.html" data-view="../add/friends.html">添加好友</a>
+              </div>
+		</section>
 		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
 		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/createView.js"></script>
 
 		<script>
 			mui.init({
 				swipeBack: false,
 				keyEventBind: {
 					backbutton: false //关闭back按键监听
-				},
-				pullRefresh: {
-					container: '#pullrefresh',
-					up: {
-						contentrefresh: '正在加载...',
-						callback: pullupRefresh
-					}
 				}
 			});
-			var count = 0;
-			/**
-			 * 上拉加载具体业务实现
-			 */
-			function pullupRefresh() {
-				setTimeout(function() {
-					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					for(var i = cells.length, len = i + 20; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell';
-						li.innerHTML = '<a class="mui-navigate-right">热点-Item ' + (i + 1) + '</a>';
-						table.appendChild(li);
-					}
-				}, 1000);
-			}
-			mui.plusReady(function() {
-				// 隐藏滚动条
-				plus.webview.currentWebview().setStyle({scrollIndicator:'none'});
-				
-				var _time = new Date().getTime();
-				var _str = '208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6Fpublicnumber/index208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6F'+_time;
-	            var _key = md5(_str).toUpperCase();
-				mui.ajax('https://nphapi.igango.com/home/Publicnumber/index',{
-						data:{
-							"key":_key,
-							"time":_time,
-							page:1,
-							page_size:10
-						},
-						dataType:'JSON',//服务器返回json格式数据
-						type:'get',//HTTP请求类型
-						timeout:100000,//超时时间设置为100秒；	              
-						success:function(data){
-	//						alert('success');
-							var data = JSON.parse(data);
-							document.getElementById('html').innerHTML = data.result[0].content;
-						},
-						error:function(xhr,type,errorThrown){
-							//异常处理；
-	//						alert(type);
-							console.log(JSON.stringify(xhr))
-						}
-				});
-
+			mui.plusReady(function(){
+				 	//点击对应用户跳到用户详情
+					mui("body").on("tap", "a", function(e) {
+		                   var _this = this;
+		                   view.openWindow(_this);
+					});
 			})
+			
+			function mailFn(data){
+				  var img = config.host + data.user_img;
+				  var name = data.rename ? data.rename : data.username;
+				  console.log(JSON.stringify(data));
+				  return '<a href="#chat_1" data-wid="./chat.html" data-view="../member/userInfo.html?rid='+data.rid+'&fid='+data.fid+'"  id="aid" class="mui-clearfix"><div class="userImg"><img src="'+ img +'" width="100%" height="100%"></div><div class="content"><h1 class="mui-ellipsis">'+ name +'</h1></div></a>';
+			}
+		    mui.ajax({
+			    	url:config.host+'/app/search/mail',
+			    	type:'post',
+			    	data:{
+			    		uid:config.userInfo.id
+			    	},
+			    	success:function(data){
+			    		mui.toast(data.msg);
+			    		console.log(JSON.stringify(data))
+			    		if(data.code==200){
+			    			var mailuL = document.getElementById('mail');
+			    			var noFriends = document.getElementById('noFriends');
+			    			 if(data.result.length==0){
+			    				   noFriends.style.display = 'block';
+			    			 }
+			    			 for(var i=0;i<data.result.length;i++){
+			    			 	   var li = document.createElement('li');
+			    			 	   li.innerHTML = mailFn(data.result[i]);	
+			    			 	   mailuL.appendChild(li);
+			    			 }
+		               }
+			    		
+			    	},
+			    	error:function(err){
+			    		console.log(err);
+			    		mui.toast('连接服务器失败')
+			    	}
+		    })
 			
 		</script>
 	</body>

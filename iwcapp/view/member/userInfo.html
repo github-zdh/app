@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/previewImage.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+		<style>
+			  body{background: #f5f7f9;}
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			 }
+			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+			 /*聊天*/
+			 #content{position:fixed;top:45px;bottom:45px;width:100%;overflow-y: scroll;}
+			 #footer{position:fixed;bottom:0px;width:100%;height: 45px;}
+			 #socketContent{padding:10px;height:100%;font-size: 15px;overflow: scroll;}
+			 #socketContent .left,#socketContent .right{position: relative;padding-right: 60px;padding-left: 60px;margin-top:10px;}
+			 #socketContent .left .userimg,#socketContent .right .userimg{width:44px;height:44px;border-radius: 5px;position: absolute;top:0;}
+			 #socketContent .left .text,#socketContent .right .text{display: inline-block;word-break: break-word;background: #FFFFFF;padding:10px 15px;line-height:24px;border-radius: 5px;position: relative;}
+			 #socketContent .left .text:before,#socketContent .right .text:before{position:absolute;top: 12px;width:10px;height:0px;content: '';border-bottom: 10px solid transparent;border-top: 10px solid transparent;border-left: 10px solid transparent;border-right: 10px solid transparent;}
+			 #socketContent .left .text:before{border-right: 10px solid #ffffff;left:-30px;}
+			 #socketContent .right .text:before{border-left: 10px solid #ffffff;right:-30px;}
+			 #socketContent .left .userimg{left: 0;}
+			 #socketContent .right .userimg{right: 0;}
+			 /*输入框*/
+			 .chatPull{position:relative;bottom: 0;width: 100%;left: 0;background: #FFFFFF;border-top:1px solid #C1C1C1;}
+			 .chatPull #chatmsg{width: 60%;border:0;border-bottom: 1px solid #c1c1c1;margin-left: 10px;border-radius: 0;}
+			 .chatPull #send{margin-top: 10px;float: right;margin-right: 10px;width: 30%;}
+			 
+			 .flex-container{flex-direction:column;-webkit-flex-direction: column;display: flex;display: -webkit-flex;position: fixed;top:0;left: 0;right: 0;bottom: 0;}
+		     #socketContent .left i.loop-mymove,#socketContent .right i.loop-mymove{position: absolute;top:16px;font-size: 14px;width: 14px;height: 14px;}
+		     #socketContent .left i.loop-mymove{right: -20px;}
+		     #socketContent .right i.loop-mymove{left: -20px;}
+		     .noLoopIcon i.loop-mymove{display: none;}
+		</style>
+		<style type="text/css">
+			   #openWindow header .search{margin-left:30px;position: relative;}
+			   #openWindow header .search input{font-size:14px;display: inline-block;height: 36px;color:#FFFFFF;margin:0;margin-top:4px;padding-left:40px;padding-right:40px;background: #333333;border:0;border-bottom: 1px solid #000000;border-radius: 0;}
+			   #openWindow header .search i, #openWindow header .search .mui-btn{position: absolute;top:0;left: 5px;}
+			   #openWindow header .search .mui-btn{right: 0px;left: auto;top:5px}
+			   #openWindow header .search i:after{position: fixed;height: 30px;width: 1px;background: #000000;}
+			   .mui-table-view-cell .mui-navigate-right h1{font-size: 20px;}
+			   /**/
+			  			/*-------------------*/
+             .homeList ul li a{position: relative;display: block;background: #fff;}
+             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+             .homeList ul li a .userImg,.homeList ul li a .time{width: 44px;height: 44px;overflow: hidden;position: absolute;top:7px;left:10px;border-radius: 3px;}
+             .homeList ul li a .msg{position:absolute;top:3px;left:54px;z-index:1000;font-size: 10px;color:#fff;}
+             .homeList ul li a .msg .mui-badge{line-height: 1;padding-top:3px;}
+             .homeList ul li a .content{padding:7px 7px 7px 65px;} 
+             .homeList ul li a h1,.homeList ul li a p{overflow: hidden;text-overflow: ellipsis;white-space:nowrap;}
+             .homeList ul li a h1{font-size: 16px;color:#333;line-height: 24px;}
+             .homeList ul li a p,.homeList ul li a .time{font-size: 12px;color:#999;}
+             .homeList ul li a div.time{width: 55px;right: 10px;left:auto;font-size:11px;text-align:right;}
+             .homeList ul li a .time span{font-size: 24px;color:#ccc;}
+             /**/
+             ul,li{display: block;list-style-type: none;    padding: 0;}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<div id="openWindow">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title mui-text-left">123</h1>
+				<a class="mui-icon-contact mui-icon mui-pull-right"></a>
+			</header>
+		</div>
+		<div style="height: 66px;"></div>
+		<div class="content mui-text-center" style="margin-top:15px;">
+			<div id="chat">
+				<button  type="button" class="mui-btn mui-btn-primary" style="width:70%;margin-top:300px;" >发起聊天</button>
+			</div>
+		</div>
+
+
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		
+		<script>
+				mui.init({
+					swipeBack: false,
+					keyEventBind: {
+						backbutton: true //关闭back按键监听
+					}
+				});
+				
+				var rid  = location.href.split('rid=')[1].split('&fid=')[0];
+				var fid  = location.href.split('fid=')[1];
+				
+
+
+				function addUserItem(data){
+					   document.getElementById('adduser').innerHTML = '';
+					   var li = '<li data-id="'+data.id+'"><a ><div class="userImg"><img src="'+config.host+data.user_img+'"></div><div class="content"><h1>'+data.username+'</h1><p>'+data.nickname+'</p></div></div></a></li>'
+				       document.getElementById('adduser').innerHTML = li;
+				}
+				mui.plusReady(function() {
+                      mui('#chat').on('tap','button',function(){
+                      	      view.openWindow({
+	                      	      	view:'../chat/chat.html?room='+rid+'&uid='+config.userInfo.id,
+	                      	      	wid:"./chat.html?v="+Math.random()
+                      	      });
+                      })						
+				})
+		</script>
+
+	</body>
+
+</html>

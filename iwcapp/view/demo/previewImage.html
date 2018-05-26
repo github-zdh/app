@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图片放大</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="./previewImage.css">
+
+	</head>
+
+	<body onselectstart="return false;">
+
+   <ul>
+       <li><img class="file-pic" data-preview-src="" data-preview-group="1" src="../../images/cbd.jpg" width="200px"/></li>
+       <li><img class="file-pic" data-preview-src="" data-preview-group="1" src="../../images/cbd.jpg" width="200px"/></li>
+       <li><img class="file-pic" data-preview-src="" data-preview-group="1" src="../../images/cbd.jpg" width="200px"/></li>
+   </ul>  
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.previewimage.js"></script>
+		
+		<script>
+				mui.init({
+					swipeBack: false,
+					keyEventBind: {
+						backbutton: true //关闭back按键监听
+					}
+				});
+
+		</script>
+
+	</body>
+
+</html>

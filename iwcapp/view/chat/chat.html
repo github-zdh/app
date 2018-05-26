@@ -8,74 +8,118 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
         <script src="../../contronller/init.js"></script>
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/previewImage.css">
 		<link rel="stylesheet" href="../../css/style.css">
 		<link rel="stylesheet" href="../../css/index.css">
 		<style>
+			  body{background: #f5f7f9;}
 			  .mui-bar-nav{
 			 	background: #333333;
 			 	box-shadow: none;
 			 }
 			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+			 /*聊天*/
 			 #content{position:fixed;top:45px;bottom:45px;width:100%;overflow-y: scroll;}
 			 #footer{position:fixed;bottom:0px;width:100%;height: 45px;}
+			 #socketContent{padding:10px;height:100%;font-size: 15px;overflow: scroll;}
+			 #socketContent .left,#socketContent .right{position: relative;padding-right: 60px;padding-left: 60px;margin-top:10px;}
+			 #socketContent .left .userimg,#socketContent .right .userimg{width:44px;height:44px;border-radius: 5px;position: absolute;top:0;}
+			 #socketContent .left .text,#socketContent .right .text{display: inline-block;word-break: break-word;background: #FFFFFF;padding:10px 15px;line-height:24px;border-radius: 5px;position: relative;}
+			 #socketContent .left .text:before,#socketContent .right .text:before{position:absolute;top: 12px;width:10px;height:0px;content: '';border-bottom: 10px solid transparent;border-top: 10px solid transparent;border-left: 10px solid transparent;border-right: 10px solid transparent;}
+			 #socketContent .left .text:before{border-right: 10px solid #ffffff;left:-30px;}
+			 #socketContent .right .text:before{border-left: 10px solid #ffffff;right:-30px;}
+			 #socketContent .left .userimg{left: 0;}
+			 #socketContent .right .userimg{right: 0;}
+			 /*输入框*/
+			 .chatPull{position:relative;bottom: 0;width: 100%;left: 0;background: #FFFFFF;border-top:1px solid #C1C1C1;}
+			 .chatPull #chatmsg{width: 60%;border:0;border-bottom: 1px solid #c1c1c1;margin-left: 10px;border-radius: 0;}
+			 .chatPull #send{margin-top: 10px;float: right;margin-right: 10px;width: 30%;}
 			 
+			 .flex-container{flex-direction:column;-webkit-flex-direction: column;display: flex;display: -webkit-flex;position: fixed;top:0;left: 0;right: 0;bottom: 0;}
+		     #socketContent .left i.loop-mymove,#socketContent .right i.loop-mymove{position: absolute;top:16px;font-size: 14px;width: 14px;height: 14px;}
+		     #socketContent .left i.loop-mymove{right: -20px;}
+		     #socketContent .right i.loop-mymove{left: -20px;}
+		     .noLoopIcon i.loop-mymove{display: none;}
 		</style>
-
+		<style type="text/css">
+			   .loop-mymove{
+						animation:mymove 0.72s infinite linear ;
+						-webkit-animation:mymove 0.72s infinite linear ; /* Safari 和 Chrome */
+						transform-origin:center;
+						-webkit-transform-origin:50%;
+						
+				}
+				@keyframes mymove {
+				    0% {
+							transform: rotate(0deg);
+							-webkit-transform: rotate(0deg);	/* Safari 和 Chrome */
+					}		
+				    100% {
+							transform: rotate(360deg);
+							-webkit-transform: rotate(360deg);	/* Safari 和 Chrome */
+					}
+				}
+				@-webkit-keyframes mymove {
+				    0% {
+							transform: rotate(0deg);
+							-webkit-transform: rotate(0deg);	/* Safari 和 Chrome */
+					}		
+				    100% {
+							transform: rotate(360deg);
+							-webkit-transform: rotate(360deg);	/* Safari 和 Chrome */
+					}
+				}
+		</style>
 	</head>
 
 	<body onselectstart="return false;">
-		<div id="openWindow">
+		<div id="openWindowHeader">
 			<header class="mui-bar mui-bar-nav">
 				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 				<h1 class="mui-title mui-text-left"></h1>
 				<a class="mui-icon-contact mui-icon mui-pull-right"></a>
 			</header>
 		</div>
-		<div style="height: 100px;"></div>
-		<div id="socket"></div>
-		<div><input type="text" id="chatmsg"><button id="send">send</button></div>
-		<script src="../../socket.io/socket.io.js"></script>
-		<script type="text/javascript">
-		   var username = Math.random().toString().split('.')[1] ;
-		   var socDom = function(el){
-		   	   return document.getElementById(el)
-		   };
-		   var socEl = function(html){
-		   	  var el = document.createElement('h1');
-		   	  el.innerHTML = html;
-		   	  socDom('socket').appendChild(el);
-		   }
-		   var localhost = 'http://localhost:3000/room';
-		   // var localhost = 'http://114.115.137.212:3000/room';
-		   var room = io.connect(localhost);
-		   room.on('connect',function(){
-				//连接成功
-				room.emit('room join',{username:username});
-			});  
+		<div style="height: 66px;"></div>
+		<!--<div id="socketContent" class="mui-zoom-wrapper">
+             <section class="left mui-clearfix">
+                  <img src="../../images/60x60.gif" class="userimg">
+                  <div class="content">
+                  	    <div class="text mui-text-left">
+                  	    	kjasdfoasdfjls
+                  	    	<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i>
+                  	    </div>
+                  </div>
+             </section>
+             <section class="right mui-clearfix mui-text-right">
+                  <img src="../../images/60x60.gif" class="userimg">
+                  <div class="content">
+                  	    <div class="text mui-text-left">
+                  	    	kjasdfoasdfjls
+                  	    	<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i>
+                  	    </div>                  	    
+                  </div>
+             </section>
+             <section class="right mui-clearfix mui-text-right">
+                  <img src="../../images/60x60.gif" class="userimg">
+                  <div class="content">
+                  	    <img data-preview-src="" data-preview-group="1" src="../../images/cbd.jpg" class="mui-zoom" alt="" width="150px" style="border-radius: 5px;"/>
+                  </div>
+             </section>
+		</div>-->
 
-		   room.on('room sys', function (data,ioRooms,room) {
-		        socEl(data)
-		   });
-		   socDom('send').addEventListener('click',function(){
-		   	    var sendMsg = socDom('chatmsg').value;
-		   	    console.log(sendMsg);
-		   	    room.emit('room sendMsg', sendMsg);
-		   })
-		   room.on('room msg', function (data) {
+		<div class="flex-container" id="flex-container">
+		    <div id="socketContent" class="mui-zoom-wrapper"></div>		    
+			<div class="chatPull">
+				<input type="text" id="chatmsg">
+			    <button class="" id="send">send</button>			
+			</div>
+		</div>
 
-		        console.log(JSON.stringify(data));
-		        socEl(data['from']['username']+'---'+data['msg'])
-		   });
-		   // 未读消息
-		   room.on('room unread',function(data){
-		   	    // console.log('room unread-------'+JSON.stringify(data));
-		   	    for(var i=0;i<data.length;i++){
-                     socEl(data[i]['from']['username']+'---'+data[i]['msg'])
-		   	    }
-		   })
-		</script>
-		
+
 		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.previewimage.js"></script>
 		<script src="../../contronller/config.js"></script>
 		<script src="../../contronller/common.js"></script>
 		<script src="../../js/mui.md5.js"></script>
@@ -88,6 +132,8 @@
 						backbutton: true //关闭back按键监听
 					}
 				});
+				 mui.previewImage();
+				
 
 //			    //关闭等待框
 //			     plus.nativeUI.closeWaiting();
@@ -103,40 +149,160 @@
 				plus.webview.currentWebview().setStyle({scrollIndicator:'none'});
 				//加载动画
 				setTimeout(function(){
-					 plus.nativeUI.showWaiting()
+					 plus.nativeUI.closeWaiting()
 				},300)
-				
-				var _time = new Date().getTime();
-				var _str = '208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6Fpublicnumber/index208476fb571a4103d4deea31684d18378F923ED924BC997E36DF2483DE35ED6F'+_time;
-	            var _key = md5(_str).toUpperCase();
-				mui.ajax('https://nphapi.igango.com/home/Publicnumber/index',{
-						data:{
-							"key":_key,
-							"time":_time,
-							page:1,
-							page_size:10
-						},
-						dataType:'JSON',//服务器返回json格式数据
-						type:'get',//HTTP请求类型
-						timeout:100000,//超时时间设置为100秒；	              
-						success:function(data){
-	//						alert('success');
-							var data = JSON.parse(data);
-							document.getElementById('html').innerHTML = data.result[0].content;
-							setTimeout(function(){
-								 plus.nativeUI.closeWaiting();
-							},1000)
-						},
-						error:function(xhr,type,errorThrown){
-							//异常处理；
-	//						alert(type);
-							console.log(JSON.stringify(xhr))
-						}
-				});
-
+//				mui.alert(window.location.href);
+                 
+                // 监听网络状态
+				//plus.networkinfo.getCurrentType();
+				//CONNECTION_UNKNOW: 网络状态常量，表示当前设备网络状态未知，固定值为0。
+				//CONNECTION_NONE: 网络状态常量，当前设备网络未连接网络，固定值为1。
+				//CONNECTION_ETHERNET: 网络状态常量，当前设备连接到有线网络，固定值为2。
+				//CONNECTION_WIFI: 网络状态常量，当前设备连接到无线WIFI网络，固定值为3。
+				//CONNECTION_CELL2G: 网络状态常量，当前设备连接到蜂窝移动2G网络，固定值为4。
+				//CONNECTION_CELL3G: 网络状态常量，当前设备连接到蜂窝移动3G网络，固定值为5。
+				//CONNECTION_CELL4G: 网络状态常量，当前设备连接到蜂窝移动4G网络，固定值为6。
+               document.addEventListener("netchange",function(){
+				        var nt = plus.networkinfo.getCurrentType();
+				        switch ( nt ) {
+				            case plus.networkinfo.CONNECTION_ETHERNET:
+				            case plus.networkinfo.CONNECTION_WIFI:
+				            alert("切换到wifi!"); 
+				            break; 
+				            case plus.networkinfo.CONNECTION_CELL2G:
+				            alert("切换到2G网络!"); 
+				            break; 
+				            case plus.networkinfo.CONNECTION_CELL3G:
+				            alert("切换到3G网络!"); 
+				            break; 
+				            case plus.networkinfo.CONNECTION_CELL4G:
+				            alert("切换到4G网络!"); 
+				            break; 
+				            default:
+				            alert("无网络!"); 
+				            break;
+				        }
+                })
 			})
 		</script>
-
+		
+		<script src="../../socket.io/socket.io.js"></script>
+		<!--<script src="https://lib.baomitu.com/socket.io/2.1.1/socket.io.js"></script>-->
+		<script type="text/javascript">
+			mui.plusReady(function() {
+				    document.getElementById('flex-container').style.top = view.headerHeight + 'px';
+				    var chat_id = '';
+				    var getStyle = function(el,type,px){
+				    	var _this = '';
+				    	if(window.getComputedStyle){
+				    		 _this = window.getComputedStyle(el,false)[type];
+				    	}else{
+				    		_this = el.currentStyle[type];
+				    	}
+				    	
+				    	return _this.indexOf('px')>-1 && px ? Number(_this.split('px')[0]) : _this;	    	
+				    }				    
+				    var scrollBottom = function(){
+				    	  var sBottom = setTimeout(function(){
+				    	  	   document.getElementById('socketContent').scrollTop = 100000000000;
+				    	  	   clearTimeout(sBottom);
+				    	  },500)		    	  
+				    }
+				    var socDom = function(el){
+				    	   return document.getElementById(el)
+				    };
+				    //type 1 自己 right 2=>left 别人  3=》说明
+				    var socEl = function(type,chat_id,data,uname,html,cb){
+				    	  var el = document.createElement('section');
+				    	  el.innerHTML = html;
+				    	  var imageUrl = '../../images/shuijiao.jpg';
+				    	  if(uname=='user_1'){
+				    	    	imageUrl = '../../images/shuijiao.jpg';
+				    	  }
+				    	  if(uname=='user_2'){
+				    	    	imageUrl = '../../images/yuantiao.jpg';
+				    	  }
+				    	  switch(type){
+				    	  	  case 1:		    	  	     
+				    	  	     el.innerHTML = '<div class="noLoopIcon right mui-clearfix mui-text-right" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content"><div class="text mui-text-left">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
+				    	  	  break;
+				    	  	  case 2:
+				    	  	     el.innerHTML = '<div class="noLoopIcon left mui-clearfix" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content"><div class="text mui-text-left">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
+				    	  	  break;
+				    	  	  case 3:
+				    	  	     el.innerHTML = '<div class="mui-text-center" style="padding: 10px;color: #666666;font-size:12px;">'+html+'</div>';
+				    	  	  break;
+				    	  }
+				    	  socDom('socketContent').appendChild(el);
+				    	  if(cb){cb()}
+				    }
+				     var localhost = 'http://localhost:3000/room';
+//				    var localhost = 'http://114.115.137.212:3000/room';    
+				    var url = window.location.href.split('?room=')[1].split('&uid=');
+				    document.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = 'room_'+url[0]+'/user_'+url[1];
+				    var room = io.connect(localhost);
+				    room.on('connect',function(){
+					 	//连接成功
+					 	room.emit('room join',{roomID:url[0],uIndex:url[1]});
+					 });  
+				    room.on('room sys', function (data,ioRooms,room) {
+		//		         socEl(data)
+		                 socEl(3,null,null,null,data)
+				    });
+		
+				    room.on('room msg', function (data) {
+			    	    	var type = 1;
+			    	    	if(data['from']['username']!='user_'+url[1]){
+			    	    		type = 2;
+			    	    	}
+			                socEl(type,chat_id,data,data['from']['username'],data['msg']);
+			                scrollBottom();
+				    });
+				    // 未读消息
+				    room.on('room unread',function(data){
+				    	    // console.log('room unread-------'+JSON.stringify(data));
+				    	    for(var i=0;i<data.length;i++){
+				    	    	var type = 1;
+				    	    	if(data[i]['from']['username']!='user_'+url[1]){
+				    	    		type = 2;
+				    	    	}
+		                        socEl(type,new Date().getTime(),null,data[i]['from']['username'],data[i]['msg']);
+				    	    }
+				    	    scrollBottom();		    	    
+				    })
+				    socDom('send').addEventListener('click',function(){
+				    	    chat_id = 'chat_'+new Date().getTime();
+				    	    document.getElementById('chatmsg').focus();
+				    	    var sendMsg = socDom('chatmsg').value;
+		//		    	    console.log(sendMsg);
+				    	    if(sendMsg==''){
+				    	    	return false;
+				    	    }
+				    	    socDom('chatmsg').value = '';
+				    	    room.emit('room sendMsg', {sendMsg:sendMsg,chat_id:chat_id} ,function(data){
+//				    	    	  alert(JSON.stringify(data));
+				    	    	  var noLoopIcon = socDom(data.chat_id).className;
+				    	    	  if(noLoopIcon&&noLoopIcon.indexOf('noLoopIcon')<0){
+				    	    	  	   	var noLoopIconTimeout =  setTimeout(function(){
+				    	    	  	   		socDom(data.chat_id).className = noLoopIcon+' noLoopIcon';
+				    	    	  	   		clearTimeout(noLoopIconTimeout);
+				    	    	  	   	},600)
+				    	    	  }				    	    	 
+				    	    });
+				    })
+				    socDom('chatmsg').addEventListener('focus',function(){		    	  
+		                    scrollBottom();		   
+				    })
+				    socDom('chatmsg').addEventListener('keyup',function(){		    	  
+		//		    	  console.log(this.value!='');
+				    	  if(this.value!=''){
+				    	  	  socDom('send').className = 'mui-btn-blue';
+				    	  }else{
+				    	  	  socDom('send').className = '';
+				    	  }
+				    })
+			 })
+		</script>
 	</body>
 
 </html>

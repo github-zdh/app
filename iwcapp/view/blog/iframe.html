@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>发现</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../model/index.css">
+		<script src="../../contronller/init.js"></script>
+	</head>
+	<body>
+		<iframe src="https://blog.csdn.net/NN_nan/article/details/70919825?locationNum=10&fps=1" width="100%" height="660px"></iframe>
+	</body>
+	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript">
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: false //关闭back按键监听
+				}
+			});
+			mui.plusReady(function(){
+				    plus.nativeUI.closeWaiting();
+//					var old_back = mui.back;
+//					mui.back = function(){
+//						var iframe = document.getElementById('iframe');
+//						var iframeHistory = iframe.contentWindow.history;
+//						var iframeDom = iframe.contentDocument;
+//						mui.toast(123);
+//						mui.toast();
+//						iframeHistory.back()
+//					}
+			})
+	</script>
+</html>
