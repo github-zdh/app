@@ -18,7 +18,9 @@ mui.plusReady(function(){
 							if(!obj._this&&!obj.view){
 								var obj = {_this:obj}
 							}
-							var showWait = plus.nativeUI.showWaiting("123456123456123456123456",{back:"none",background:"rgba(0,0,0,0.7)",loading:{display:"none"}});
+							//123456123456123456123456
+							//rgba(0,0,0,0.7)
+							var showWait = plus.nativeUI.showWaiting("",{back:"none",background:"rgba(0,0,0,0)",loading:{display:"none"}});
 							var duration = obj.duration?obj.duration:200;
 							var aniShow = obj.aniShow?obj.aniShow:'pop-in';
 							var top = obj.top?obj.top:(plus!=undefined?(plus.navigator.getStatusbarHeight()):20);
@@ -31,9 +33,9 @@ mui.plusReady(function(){
 							if(obj.before&&obj.before.constructor.name==='Function'){
 								   before()
 							}
-							console.log(JSON.stringify(obj));
+//							console.log(JSON.stringify(obj));
 							mui.openWindow({
-							    url:view,
+							    url: view,
 							    id:wid,
 							    styles:{
 								      top:0 +'px'//新页面顶部位置0
@@ -49,15 +51,12 @@ mui.plusReady(function(){
 							    extras:extras
 							})
 							var showPage = setTimeout(function(){
-								    console.log(' ---------------- plus.webview.show(wid,aniShow,duration);');
-								    console.log(wid+'---'+aniShow+'---'+duration)
 										plus.webview.show(wid,aniShow,duration);
 										isClick = false;
 										if(obj.after&&obj.after.constructor.name==='Function'){
 										   after()
 									  }
 										var maskTimeout = setTimeout(function(){
-											  console.log(' ---------------- showWait.close();');
 											  showWait.close();
 											  clearTimeout(showPage);											  
 										},duration+100)
@@ -80,6 +79,12 @@ mui.plusReady(function(){
 		 }else{
 		     	w.view = view;
 		 }  
+		 //默认三秒后关闭打开页面时的加载框
+		 mui.plusReady(function(){
+		 	    var closeWting = setTimeout(function(){
+		 	    	  plus.nativeUI.closeWaiting();
+		 	    },3000)		 	    
+		 })
 	})(window)
 
 })

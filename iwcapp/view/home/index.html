@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title>首页</title>
@@ -33,44 +32,43 @@
              .homeList ul li a p,.homeList ul li a .time{font-size: 12px;color:#999;}
              .homeList ul li a div.time{width: 55px;right: 10px;left:auto;font-size:11px;text-align:right;}
              .homeList ul li a .time span{font-size: 24px;color:#ccc;}
+             [v-cloak] {display: none;}
 		</style>
-		
-		<!--<script src="../../socket.io/socket.io.js"></script>
-		<script type="text/javascript">
-		   var about = io.connect('http://localhost:3000/about');  
-		   console.log(about);
-		   about.on('msg', function (data) {
-		         console.log(data);
-		   });
-		   about.emit('about event', {"event":'this is my about event'});
 
-		</script>-->
 	</head>
-
 	<body>
-		<div id="room">
+		<div id="room" v-cloak>
                 <section class="homeList">
-                      <ul id="create">
-                      	   <li v-for="item in items">
-                      	         <a data-wid="./chat.html" :data-view="'../chat/chat.html?room='+item.rid+'&uid='+item.uid">
+                      <ul id="create" v-if="items.length!=0">
+                      	   <li v-for="(item,index) in items">
+                      	         <a data-wid="./chat.html" :data-view="'../chat/chat.html?room='+index+'&uid='+uid">
                                        <div class="userImg">
-                                              <img v-bind:src="item.userImg">
+                                              <img v-bind:src="host+item.room_img" width="100%" height="100%" v-if="item.type&&item.type!=0">
+                                              
+                                              <img v-bind:src="host+item.user_img" width="100%" height="100%" v-else>
                                        </div>
-                                       <div class="msg mui-icon">
-                                         	<span class="mui-badge">{{item.badge}}</span>
+                                       <div class="msg mui-icon" v-if="item.num&&item.num!=0">
+                                         	<span class="mui-badge" v-if="item.num>99" style="left:-5px">99+</span>
+                                         	<span class="mui-badge" v-else="">{{item.num}}</span>
                                        </div>
                                        <div class="content">
-                                             <h1>{{item.title}}room={{item.rid}}&uid={{item.uid}}</h1>
-                                             <p>{{item.stitle}}</p>
+                                             <h1 v-if="item.type&&item.type!=0">{{item.name}}</h1>
+                                             <h1 v-else-if="item.rename&&item.rename!=''">{{item.rename}}</h1>
+                                             <h1 v-else>{{item.username}}</h1>
+                                             <p v-if="item.msg&&item.msg.length!=0">{{item.msg[0].msg}}</p>
+                                             <p v-else-if="item.msgs">{{item.msgs|msg}}</p>
                                        </div>
                                        <div class="time">
-                                             <div>{{item.time}}</div>
+                                             <div v-if="item.msg&&item.msg.length!=0">{{item.msg[0].addtime}}</div>
+                                             <div v-else-if="item.msgs">{{item.msgs|addtime}}</div>
                                              <span class="mui-icon mui-icon-home" v-if="item.shield"></span>
                                        </div>
                       	         </a>
                       	   </li>
-                      	   
                      </ul>
+                     <div v-else style="padding:30px;color: #999999;" class="mui-text-center">暂无聊天记录</div>
+                     <div id="emoji"></div>
+                     <!--<div  v-for="(item,index) in items" style="word-wrap: break-word;"> {{item}}</div>--> 	 
 				 </section>	
 		</div>
 		<script src="../../js/mui.min.js"></script>
@@ -82,86 +80,156 @@
 		<style type="text/css">
 			.mui-backdrop {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.3);}
 		</style>
+		
 		<script>
+
 			mui.init({
 				swipeBack: false,
 				keyEventBind: {
 					backbutton: false //关闭back按键监听
 				}
+				
 			});
-//			console.log('config.userInfo.id----------------------------------'+config.userInfo.id);
-//		    mui.ajax({
-//			    	url:config.host+'/app/search/mail',
-//			    	type:'post',
-//			    	data:{
-//			    		uid:config.userInfo.id
-//			    	},
-//			    	success:function(data){
-//			    		mui.toast(data.msg);
-//			    		console.log(JSON.stringify(data))								    		
-//			    	},
-//			    	error:function(err){
-//			    		console.log(err);
-//			    		mui.toast('连接服务器失败')
-//			    	}
-//		    })
-//			var view = new plus.nativeObj.View(id, styles, tags);
+		var newVue = '';
 		mui.plusReady(function() {
+			        plus.nativeUI.closeWaiting();
 					//点击对应聊天显示聊天界面
 					mui("body").on("tap", "a", function(e) {
 		                   var _this = this;
 		                   view.openWindow(_this);
 					});					
 					//引入vue
-					new Vue({
+					newVue = new Vue({
                         el:"#room",
 					    data:function(){
 					    	 return {
-					    	 	  items : [
-					    	 	        {
-					    	 	        	rid:1,
-					    	 	        	uid:1,
-					    	 	        	badge:1,//（数字角标）
-					    	 	        	shield:true,//屏蔽
-					    	 	        	time:'下午 15:30',
-					    	 	        	title:'首页',
-					    	 	        	stitle:'首页首页首页首页首页首页首页首页',
-					    	 	        	userImg:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4'
-					    	 	        },
-					    	 	        {
-					    	 	        	rid:1,
-					    	 	        	uid:2,
-					    	 	        	badge:2,
-					    	 	        	shield:false,
-					    	 	        	time:'下午 15:30',
-					    	 	        	title:'首页',
-					    	 	        	stitle:'首页首页首页首页首页首页首页首页',
-					    	 	        	userImg:'https://avatars2.githubusercontent.com/u/35329223?s=400&amp;u=68cabf242a4069835af3454d7d1cf09fb47b58d8&amp;v=4'
-					    	 	        }
-					    	 	  ]
+					    	 	  host:config.host?config.host:'http://114.115.137.212',
+					    	 	  items : getRoomChatItemsLocalStorage(),
+					    	 	  uid: config.userInfo.id
 					    	 }
 					    },
-					    beforeCreate:function(){
-							    mui.ajax({
-								    	url:config.host+'/app/search/mail',
-								    	type:'post',
-								    	data:{
-								    		uid:config.userInfo.id
-								    	},
-								    	success:function(data){
-								    		mui.toast(data.msg);
-								    		console.log(JSON.stringify(data))								    		
-								    	},
-								    	error:function(err){
-								    		console.log(err);
-								    		mui.toast('连接服务器失败')
-								    	}
-							    })
-					    }
+					    beforeCreate:function(){	
+					    	
+					   },
+					   filters:{
+					   	    msg:function(value){
+					   	    	  value = JSON.parse(value);
+					   	    	  var _msg = common.restoreEmoji(value.msg);
+					   	    	  var imgReg = /^<img.+\/>$/g;
+					   	    	  if(imgReg.test(_msg)){
+					   	    	  	 _msg = '[ 图片 ]';
+					   	    	  }
+					   	    	  return _msg;
+					   	    },
+					   	    addtime:function(value){
+					   	    	  value = JSON.parse(value).addtime;					   	    	  
+					   	    	  return value
+					   	    }
+					   }
 					})
 			  });
-		</script>
+
+		</script>		
+   
+		<script type="text/javascript">			
+			  //缓存id根据缓存id拿到对应id的用户信息
+			  var __RoomChatItems = 'RoomChatItems'+config.userInfo.id;
 		
+			  function getRoomChatItemsLocalStorage(){
+			  	       var RoomChatItems = window.localStorage.getItem(__RoomChatItems);
+			  	       RoomChatItems = RoomChatItems!==null&&Object.prototype.toString.call(JSON.parse(RoomChatItems))==='[object Object]'?JSON.parse(RoomChatItems):{};
+			  	       return RoomChatItems;
+			  }
+
+				 window.addEventListener('customEvent',function(event){
+			    		 if(!getRoomChatItemsLocalStorage()[event.detail.rid]){
+			    		 	 return false;
+			    		 }
+			    		 if(event.detail.msg){
+				    		 addRoomChatItemsLocalStorage(event.detail.rid,[
+					    			 {name:'msgs',value:JSON.stringify(event.detail.msg)}
+				    		 ]);
+			    		 }else{
+				    		 addRoomChatItemsLocalStorage(event.detail.rid,[
+					    			 {name:'num',value:event.detail.num}
+				    		 ]);
+			    		 }
+				  });
+				  function addRoomChatItemsLocalStorage(rid,arr){
+				  	       var RoomChatItems = getRoomChatItemsLocalStorage();	
+				  	       if(!RoomChatItems[rid]){
+				  	       	   RoomChatItems[rid] = {}
+				  	       }
+				  	       for(var i=0;i<arr.length;i++){
+				  	       	   RoomChatItems[rid][arr[i].name] = arr[i].value;
+				  	       }			  	       
+				  	       window.localStorage.setItem(__RoomChatItems,JSON.stringify(RoomChatItems));
+				  	       
+				  	       //修改列表		  	       
+				  	       newVue.items = getRoomChatItemsLocalStorage();
+				  	       getChatNum();			
+				  }	
+				  //查询所有的未读信息数量在首页显示
+				  function getChatNum(){
+				  	   console.log('getChatNum---------------->');
+				  	   var getnum = getRoomChatItemsLocalStorage();
+				  	   var _num = 0;
+				  	   for(var i in getnum){
+				  	   	  _num = _num + parseInt(getnum[i].num);
+				  	   }
+				  	   mui.fire(plus.webview.getLaunchWebview(),'chatNum',{num:_num})
+				  }
+				  
+				  
+				  // 获取房间信息
+				   function getRoomChatItem(rid,num){
+							    mui.ajax({
+							    	url:config.host+'/app/search/roomInfo',
+							    	type:'post',
+							    	data:{
+							    		rid:rid,
+							    		uid:config.userInfo.id
+							    	},
+							    	success:function(data){
+							    		var result = JSON.parse(data).result;						    		
+							    		addRoomChatItemsLocalStorage(rid,[
+								    			 {name:'num',value:num}
+								    			,{name:'type',value:result['type']}
+								    			,{name:'name',value:result['name']}
+								    			,{name:'rename',value:result['rename']}
+								    			,{name:'user_img',value:result['user_img']}
+								    			,{name:'username',value:result['username']}
+								    			,{name:'room_img',value:result['room_img']}
+								    			,{name:'msgs',value:result['msg']}
+							    		]);
+							    		
+							    	},
+							    	error:function(err){
+							    		// addRoomChatItemsLocalStorageNum(rid,num);
+							    		console.log(err);
+							    		mui.toast('连接服务器失败')
+							    	}
+						    })
+				   }	
+		</script>
+		<script src="../../socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+
+				   // var localhost = 'http://127.0.0.1:3000/home';
+				   var localhost = 'http://114.115.137.212:3000/home';  
+				   var uid = config.userInfo.id;
+				   var reHomeChatNum = [];
+				   var home = io.connect(localhost);  
+				   // 更新首页 群聊天未读信息数量
+				   home.on('uid_'+uid+'_num', function (data) {	
+				   	     getRoomChatItem(data.rid,data.num);
+				   });
+				   home.on('msg', function (data) {
+				         console.log(data);
+				   });
+				   home.emit('home GetReHomeChatNum', {"uid":uid});
+
+		</script>
 
 	</body>
 </html>

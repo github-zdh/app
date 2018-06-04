@@ -7,6 +7,23 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+ 		<script type="text/javascript">
+ 			if(window.plus){
+				indexPlusReady();
+			}else{
+				document.addEventListener('plusready', indexPlusReady, false);
+			}
+			// 监听Webview窗口页面加载完成事件
+			function indexPlusReady() {
+				// 打开新窗口
+				 var userInfo = window.localStorage.getItem('userInfo');
+		 
+				 if(!userInfo){
+				 	  plus.webview.create('./view/login/index.html','loginIndex.html').show();			 	  
+				 }
+			}
+			
+ 		</script>
  		<script src="./contronller/init.js"></script> 		
 		<link rel="stylesheet" href="./css/mui.min.css">
 		<link rel="stylesheet" href="./css/style.css">
@@ -24,26 +41,21 @@
 			}
 			.mui-icon .mui-badge{line-height: 1;padding-top:3px;}
 		</style>
-		<script>
-//			var userInfo = {
-//				user_name : 'zdh',
-//				user_id : 1
-//			}
-//			localStorage.setItem('userInfo',JSON.stringify(userInfo))
-		</script>
 	</head>
 
 	<body onselectstart="return false;">
 		<div id="openWindow">
 			<header class="mui-bar mui-bar-nav">
 				<a class="mui-pull-left">ZDH</a>
-				<h1 class="mui-title mui-text-left"></h1>
-				<span class="mui-icon-contact mui-icon mui-pull-right"></span>
+				<h1 class="mui-title mui-text-center" id="usernameH1"></h1>
+				<span class="mui-icon mui-pull-right" style="font-size: 36px;font-weight: 100;vertical-align: 1px;padding-top:0;padding-bottom: 0;line-height: 44px;">+</span>
 			</header>
 		</div>
 		<nav class="mui-bar mui-bar-tab footer-tab">
 			<a class="mui-tab-item mui-active" href="#home" data-wid="./view/home/index.html"  onclick="updateView()">
-				<span class="mui-icon mui-icon-home"><span class="mui-badge">9</span></span>
+				<span class="mui-icon mui-icon-home">
+					<span class="mui-badge" id="chatnum" style="display: none;"></span>
+				</span>
 				<span class="mui-tab-label">首页</span>
 			</a>
 			<a class="mui-tab-item" href="#mail" data-wid="./view/home/mail.html">
@@ -60,6 +72,7 @@
 			</a>
 		</nav>				
 		<script src="./js/mui.min.js"></script>
+		<script src="./contronller/pages.js"></script>
 		<script src="./js/webviewGroup.js"></script>
 		<script src="./contronller/config.js"></script>
 		<script src="./contronller/common.js"></script>
@@ -68,19 +81,21 @@
 		
 		<script>				
 				mui.init();	
-
+				window.addEventListener('chatNum',function(event){
+			    		 var chatnum = document.getElementById('chatnum');
+			    		 if(event.detail.num>0){
+			    		 	  chatnum.style.display = 'block';
+			    		 	  chatnum.innerHTML = event.detail.num;
+			    		 }else{
+			    		 	  chatnum.style.display = 'none';
+			    		 }
+				});
 				var ws=null,wc=null;
 				mui.plusReady(function() {
-//					localStorage.removeItem('userInfo');
-					
-//					alert(JSON.stringify(config))
-					
 					
 					mui.back = muiBack.indexBack;
-					
 
 					var _self = plus.webview.currentWebview();
-                    console.log(_self.id=='./index.html')
 					//触发menu菜单
 					ws=plus.webview.currentWebview();
 					ws.riginMenu = true;
@@ -97,6 +112,9 @@
 								  top:view.headerHeight +'px',
 								  bottom:'51px'
 							},
+							waiting:{
+						      autoShow:false//自动显示等待框，默认为true
+						    },
 							extras: {}
 						}, {
 							id: "mail",
@@ -145,10 +163,10 @@
 						// 防止快速点击可能导致多次创建
 						var isTap = true;
 						plus.nativeUI.closeWaiting();
-						var wcWaiting = plus.nativeUI.showWaiting("123456",{back:"none",background:"rgba(0,0,0,0.7)",loading:{display:"none"}});
+						var wcWaiting = plus.nativeUI.showWaiting("",{back:"none",background:"rgba(0,0,0,0)",loading:{display:"none"}});
 
 						// 开启遮罩 /否则点击旁边不能关闭右角菜单
-						ws.setStyle({mask:"rgba(0,0,0,0.5)"});
+						ws.setStyle({mask:"rgba(0,0,0,0.1)"});
 						common.topRightMenu.home.styels.top = (plus.navigator.getStatusbarHeight() + 44) +'px';
 						// 创建侧滑页面 
 						wc=plus.webview.create("./view/home/tr.menu.html","tr.menu.html",common.topRightMenu.home.styels,common.topRightMenu.home.extras);
@@ -275,29 +293,7 @@
 				// }
 		</script>    
 		         
-        <!--通知栏-->
-        <script type="text/javascript">
-//      	 mui.plusReady(function(){   
-//			       plus.push.createMessage( '哈哈哈哈哈哈2',{page:'./view/demo/previewImage.html'},{
-//			              title: 'data.title',
-//			              sound: 'none',
-//			              cover: true,
-//			              when: '2018/5/23'
-//			       });
-//			       
-			        //APP还没有退出
-//					plus.push.addEventListener( "click", function( pushInfo ) {
-//						console.log(JSON.stringify(pushInfo))
-//						view.openWindow({view:pushInfo.payload.page,wid:pushInfo.payload.page})
-//					}, false );
-					//APP已经关闭退出
-					//启动APP 并跳转到特定页面
-//					plus.push.addEventListener( "receive", function( pushInfo ) {
-//						console.log(pushInfo.payload.page)
-//						view.openWindow({view:pushInfo.payload.page,wid:pushInfo.payload.page})
-//					}, false );
-//           })
-        </script>
+
 	</body>
 
 </html>

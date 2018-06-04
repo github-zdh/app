@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/previewImage.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+		<style>
+			  body{background: #f5f7f9;}
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			 }
+			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+			 /*聊天*/
+			 #content{position:fixed;top:45px;bottom:45px;width:100%;overflow-y: scroll;}
+			 #footer{position:fixed;bottom:0px;width:100%;height: 45px;}
+			 #socketContent{padding:10px;height:100%;font-size: 15px;overflow: scroll;}
+			 #socketContent .left,#socketContent .right{position: relative;padding-right: 60px;padding-left: 60px;margin-top:10px;}
+			 #socketContent .left .userimg,#socketContent .right .userimg{width:44px;height:44px;border-radius: 5px;position: absolute;top:0;}
+			 #socketContent .left .text,#socketContent .right .text{display: inline-block;word-break: break-word;background: #FFFFFF;padding:10px 15px;line-height:24px;border-radius: 5px;position: relative;}
+			 #socketContent .left .text:before,#socketContent .right .text:before{position:absolute;top: 12px;width:10px;height:0px;content: '';border-bottom: 10px solid transparent;border-top: 10px solid transparent;border-left: 10px solid transparent;border-right: 10px solid transparent;}
+			 #socketContent .left .text:before{border-right: 10px solid #ffffff;left:-30px;}
+			 #socketContent .right .text:before{border-left: 10px solid #ffffff;right:-30px;}
+			 #socketContent .left .userimg{left: 0;}
+			 #socketContent .right .userimg{right: 0;}
+			 /*输入框*/
+			 .chatPull{position:relative;bottom: 0;width: 100%;left: 0;background: #FFFFFF;border-top:1px solid #C1C1C1;}
+			 .chatPull #chatmsg{width: 60%;border:0;border-bottom: 1px solid #c1c1c1;margin-left: 10px;border-radius: 0;}
+			 .chatPull #send{margin-top: 10px;float: right;margin-right: 10px;width: 30%;}
+			 
+			 .flex-container{flex-direction:column;-webkit-flex-direction: column;display: flex;display: -webkit-flex;position: fixed;top:0;left: 0;right: 0;bottom: 0;}
+		     #socketContent .left i.loop-mymove,#socketContent .right i.loop-mymove{position: absolute;top:16px;font-size: 14px;width: 14px;height: 14px;}
+		     #socketContent .left i.loop-mymove{right: -20px;}
+		     #socketContent .right i.loop-mymove{left: -20px;}
+		     .noLoopIcon i.loop-mymove{display: none;}
+		</style>
+		<style type="text/css">
+			   #openWindowHeader header .search{margin-left:30px;position: relative;}
+			   #openWindowHeader header .search input{font-size:14px;display: inline-block;height: 36px;color:#FFFFFF;margin:0;margin-top:4px;padding-left:40px;padding-right:40px;background: #333333;border:0;border-bottom: 1px solid #000000;border-radius: 0;}
+			   #openWindowHeader header .search i, #openWindowHeader header .search .mui-btn{position: absolute;top:0;left: 5px;}
+			   #openWindowHeader header .search .mui-btn{right: 0px;left: auto;top:5px}
+			   #openWindowHeader header .search i:after{position: fixed;height: 30px;width: 1px;background: #000000;}
+			   .mui-table-view-cell .mui-navigate-right h1{font-size: 20px;}
+			   /**/
+			  			/*-------------------*/
+             .homeList ul li a{position: relative;display: block;background: #fff;}
+             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+             .homeList ul li a .userImg{width: 36px;height: 36px;overflow: hidden;position: absolute;top:7px;left:10px;border-radius: 3px;}
+             .homeList ul li a .content{padding:7px 117px 7px 55px;} 
+             .homeList ul li a h1,.homeList ul li a p{overflow: hidden;text-overflow: ellipsis;white-space:nowrap;}
+             .homeList ul li a img{width: 100%;height: 100%;}
+             .homeList ul li a h1{font-size: 16px;color:#333;line-height: 36px;}
+             .homeList ul li a .button{position: absolute;top:15px;right: 5px;}
+             /**/
+             ul,li{display: block;list-style-type: none;    padding: 0;}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<div id="openWindowHeader">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title mui-text-left">新朋友</h1>
+			</header>
+		</div>
+		<!--<div style="height: 66px;"></div>-->
+		<div class="content" style="margin-top:15px;">
+       				<section class="homeList">
+                      <ul id="adduser">
+                      	                       	   
+                     </ul>
+				 </section>	
+				<div id="noUser" class="mui-text-center" style="display: none;padding:15px;">暂无群聊</div>
+		</div>
+
+
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		
+		<script>
+				mui.init({
+					swipeBack: false,
+					keyEventBind: {
+						backbutton: true //关闭back按键监听
+					}
+				});
+				
+				function addUserItem(data){
+					   return '<a data-wid="./chat.html" data-view="../chat/chat.html?room='+data.id+'&uid='+config.userInfo.id+'"><div class="userImg"><img src="'+config.host+data.room_img+'"></div><div class="content"><h1 class="mui-ellipsis">'+data.name+'</h1></div></div></a>'
+				}
+//				mui.plusReady(function() {
+						    mui.ajax({
+								    	url:config.host+'/app/search/GroupChat',
+								    	type:'post',
+								    	data:{
+								    		//config.userInfo.id
+								    		uid:config.userInfo.id
+								    	},
+								    	success:function(data){
+//								    		alert(data);
+								    		data = typeof data=='string'?JSON.parse(data):data;
+								    		if(data.code==200){
+//		                                          console.log(JSON.stringify(data))
+		                                          var adduser = document.getElementById('adduser');
+		                                          for(var i=0;i<data.result.length;i++){
+		                                          	  var li = document.createElement('li');
+		                                          	  li.setAttribute('data-uid',data.result[i].id);
+		                                          	  li.innerHTML = addUserItem(data.result[i]);
+		                                          	  adduser.appendChild(li);
+		                                          }
+		                                          return false;
+								    		}
+								    		if(data.code==202){
+		                                          console.log(JSON.stringify(data))
+//		                                          document.getElementById('noUser').style.display = 'block';   
+		                                          return false;
+								    		}
+								    		mui.toast(data.msg);
+								    		
+								    	},
+								    	error:function(err){
+								    		console.log(err);
+								    		mui.toast('连接服务器失败')
+								    	}
+						    })
+							mui("body").on("tap", "a", function(e) {
+				                   var _this = this;
+				                   view.openWindow(_this);
+							});	
+//				})
+		</script>
+
+	</body>
+
+</html>

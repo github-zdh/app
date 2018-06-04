@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/previewImage.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+		<style>
+			  body{background: #f5f7f9;}
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			 }
+			 .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+		
+		</style>
+		<style type="text/css">
+			   #openWindowHeader{z-index: 1000;}
+			   #openWindowHeader header .search{margin-left:30px;position: relative;}
+			   #openWindowHeader header .search input{font-size:14px;display: inline-block;height: 36px;color:#FFFFFF;margin:0;margin-top:4px;padding-left:40px;padding-right:40px;background: #333333;border:0;border-bottom: 1px solid #000000;border-radius: 0;}
+			   #openWindowHeader header .search i, #openWindowHeader header .search .mui-btn{position: absolute;top:0;left: 5px;}
+			   #openWindowHeader header .search .mui-btn{right: 0px;left: auto;top:5px}
+			   #openWindowHeader header .search i:after{position: fixed;height: 30px;width: 1px;background: #000000;}
+			   .mui-table-view-cell .mui-navigate-right h1{font-size: 20px;}
+				/*-------------------*/
+	             .homeList ul li:last-child a{border: 0;}
+	             .homeList ul li a{position: relative;display: block;background: #fff;}
+	             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+	             .homeList ul li a .userImg{width: 29px;height: 29px;overflow: hidden;position: absolute;top:9px;left:10px;border-radius: 3px;}
+	             .homeList ul li a .content{padding:5px 5px 5px 50px;}
+	             .homeList ul li a h1{font-size: 15px;color:#333;line-height: 30px;}
+	             .blog{margin-top:10px;}
+	             .userImg i.mui-icon{font-size: 30px;}
+                  ul,li{display: block;list-style-type: none;    padding: 0;}
+		</style>
+	</head>
+
+	<body onselectstart="return false;">
+		<div id="openWindowHeader">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title mui-text-left">设置</h1>
+			</header>
+		</div>
+        <section class="homeList">
+              <div class="blog">
+					<ul>
+						<li>
+							<a href="#chat_1" data-wid="view/member/set.html" data-view="/view/member/set.html" class="mui-clearfix">
+								<div class="userImg">
+									<!--<img src="../../images/blog.jpg" width="100%" height="100%">-->
+									<i class="mui-icon mui-icon-gear"></i>
+								</div>
+								<div class="content">
+									<h1 class="mui-ellipsis">设置</h1>
+								</div>
+							</a>
+						</li>
+					</ul>
+              </div>
+
+		</section>
+
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		<script src="../../contronller/pages.js"></script>
+
+		<script>
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: true //关闭back按键监听
+				}
+			});
+			mui.plusReady(function() {
+
+			})
+			
+		</script>
+	</body>
+
+</html>

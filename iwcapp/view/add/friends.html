@@ -123,6 +123,8 @@
 	                   	       
 	                   },false)
 						document.getElementById('search').addEventListener('click',function(){
+							    mui.toast(config.host+'/app/search/user');
+
 							    document.getElementById('noUser').style.display = 'none';
 							    mui.ajax({
 							    	url:config.host+'/app/search/user',
@@ -131,6 +133,7 @@
 							    		email:document.getElementById('keyword').value
 							    	},
 							    	success:function(data){
+							    		data = JSON.parse(data);
 							    		mui.toast(data.msg);
 							    		if(data.code==200){
                                               console.log(JSON.stringify(data))

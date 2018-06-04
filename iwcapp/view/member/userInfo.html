@@ -70,7 +70,7 @@
 		<div id="openWindow">
 			<header class="mui-bar mui-bar-nav">
 				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-				<h1 class="mui-title mui-text-left">123</h1>
+				<h1 class="mui-title mui-text-left" id="title"></h1>
 				<a class="mui-icon-contact mui-icon mui-pull-right"></a>
 			</header>
 		</div>
@@ -99,8 +99,26 @@
 				
 				var rid  = location.href.split('rid=')[1].split('&fid=')[0];
 				var fid  = location.href.split('fid=')[1];
-				
-
+//				 			
+			     mui.ajax({
+				    	url:config.host+'/app/search/user',
+				    	type:'post',
+				    	data:{
+				    		uid:fid
+				    	},
+				    	success:function(data){				    		
+				    		data = JSON.parse(data);
+				    		if(data.code==200){
+				    			document.getElementById('title').innerHTML = data.result.username;
+				    		}else{
+				    			mui.toast(data.msg);
+				    		}				    		
+				    	},
+				    	error:function(err){
+				    		console.log(err);
+				    		mui.toast('连接服务器失败')
+				    	}
+			     })
 
 				function addUserItem(data){
 					   document.getElementById('adduser').innerHTML = '';
@@ -108,11 +126,16 @@
 				       document.getElementById('adduser').innerHTML = li;
 				}
 				mui.plusReady(function() {
+                      var currentWindow = plus.webview.currentWebview();
                       mui('#chat').on('tap','button',function(){
                       	      view.openWindow({
 	                      	      	view:'../chat/chat.html?room='+rid+'&uid='+config.userInfo.id,
 	                      	      	wid:"./chat.html?v="+Math.random()
                       	      });
+                      	      setTimeout(function(){
+                      	      	  currentWindow.hide();
+                      	      	  currentWindow.close();
+                      	      },1000)
                       })						
 				})
 		</script>

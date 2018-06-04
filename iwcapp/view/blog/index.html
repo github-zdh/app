@@ -1,48 +1,150 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-
 	<head>
-		<meta charset="utf-8">
-		<title>发现</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="MobileOptimized" content="320"/>
+		<title>Hello H5+</title>
+        <script src="../../contronller/init.js"></script>
 		<link rel="stylesheet" href="../../css/mui.min.css">
-		<link rel="stylesheet" href="../../model/index.css">
-		<script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/previewImage.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+		<script type="text/javascript" charset="utf-8">
+//var ws=null,embed=null;
+//// 扩展API加载完毕，现在可以正常调用扩展API 
+//function plusReady(){
+//	ws=plus.webview.currentWebview();
+//	ws.addEventListener('show',createEmbed,false);
+//}
+//// 判断扩展API是否准备，否则监听"plusready"事件
+//if(window.plus){
+//	plusReady();
+//}else{
+//	document.addEventListener("plusready",plusReady,false);
+//}
+//// 创建子Webview
+//function createEmbed(){
+//	var topoffset='45px';
+//	if(plus.navigator.isImmersedStatusbar()){// 兼容immersed状态栏模式
+//		topoffset=(Math.round(plus.navigator.getStatusbarHeight())+45)+'px';
+//	}
+//	plus.nativeUI.showWaiting('',{style:'black',modal:false,background:'rgba(0,0,0,0)'});
+//	embed=plus.webview.create('https://mil.eastday.com/?qid=01502','embed',{top:topoffset,bottom:'0px',position:'dock',dock:'bottom',bounce:'vertical'});
+//	ws.append(embed);
+//	embed.addEventListener('loaded',function(){
+//		plus.nativeUI.closeWaiting();
+//	},false);
+//	embed.addEventListener('loading',function(){
+//		plus.nativeUI.showWaiting('',{style:'black',modal:false,background:'rgba(0,0,0,0)'});
+//	},false);
+//}
+//// 打开网址
+//function openUrl(){
+//	var url=document.getElementById("url");
+//	embed.loadURL(url.value);
+//	url.blur();
+//}
+//// 页面加载后自动打开
+//document.addEventListener("DOMContentLoaded",function(){
+//	if(embed){
+//		openUrl();
+//	}else{
+//		auto=true;
+//	}
+//},false);
+//// 页面跳转完成事件
+//function onBrowserLoading(){
+//	document.getElementById("url").value=embed.getURL();
+//}
+		</script>
+		<style type="text/css">
+			  body{background: #f5f7f9;}
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			  }
+			  .mui-bar .mui-title,.mui-bar-nav.mui-bar .mui-icon{color: #fff;}
+			   #openWindowHeader header .search{margin-left:30px;position: relative;}
+			   #openWindowHeader header .search input{font-size:14px;display: inline-block;height: 36px;color:#FFFFFF;margin:0;margin-top:4px;padding-left:40px;padding-right:40px;background: #333333;border:0;border-bottom: 1px solid #000000;border-radius: 0;}
+			   #openWindowHeader header .search i, #openWindowHeader header .search .mui-btn{position: absolute;top:0;left: 5px;}
+			   #openWindowHeader header .search .mui-btn{right: 0px;left: auto;top:5px}
+			   #openWindowHeader header .search i:after{position: fixed;height: 30px;width: 1px;background: #000000;}
+			   .mui-table-view-cell .mui-navigate-right h1{font-size: 20px;}
+			   /**/
+			  			/*-------------------*/
+             .homeList ul li a{position: relative;display: block;background: #fff;}
+             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+             .homeList ul li a .userImg,.homeList ul li a .time{width: 44px;height: 44px;overflow: hidden;position: absolute;top:7px;left:10px;border-radius: 3px;}
+             .homeList ul li a .msg{position:absolute;top:3px;left:54px;z-index:1000;font-size: 10px;color:#fff;}
+             .homeList ul li a .msg .mui-badge{line-height: 1;padding-top:3px;}
+             .homeList ul li a .content{padding:7px 7px 7px 65px;} 
+             .homeList ul li a h1,.homeList ul li a p{overflow: hidden;text-overflow: ellipsis;white-space:nowrap;}
+             .homeList ul li a h1{font-size: 16px;color:#333;line-height: 24px;}
+             .homeList ul li a p,.homeList ul li a .time{font-size: 12px;color:#999;}
+             .homeList ul li a div.time{width: 55px;right: 10px;left:auto;font-size:11px;text-align:right;}
+             .homeList ul li a .time span{font-size: 24px;color:#ccc;}
+             /**/
+             ul,li{display: block;list-style-type: none;    padding: 0;}
+             header a.mui-action-back:active{background: #000000;}
+             .mui-bar-nav.mui-bar .mui-icon{font-size:39px;padding:3px;padding-bottom: 2px;}
+             /*header a.mui-action-back{font-weight:300;height:44px;line-height: 42px;padding:0 15px;margin:0;margin-left:-10px;left:0;color:#FFFFFF;font-size: 30px;}*/
+		</style>
 	</head>
 	<body>
-
+		<div id="openWindowHeader">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-closeempty  mui-pull-left mui-text-left" id="back"></a>
+				<h1 class="mui-title mui-text-left" style="padding-left: 10px;">123</h1>
+				<!--<a class="mui-icon-contact mui-icon mui-pull-right"></a>-->
+			</header>
+		</div>
+		
 	</body>
-			<script src="../../js/mui.min.js"></script>
-			<script src="../../js/mui.md5.js"></script>
-			<script src="../../contronller/config.js"></script>
-			<script src="../../contronller/common.js"></script>
-			<script src="../../contronller/createView.js"></script>
-			<style type="text/css">
-				.mui-backdrop {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.3);}
-			</style>
-			<script>
-						
-						mui.init({
-							swipeBack: false,
-							keyEventBind: {
-								backbutton: true //关闭back按键监听
-							},
-						    subpages:[{
-							      url:'http://114.115.137.212',//子页面HTML地址，支持本地地址和网络地址
-							      id:'http://114.115.137.212',//子页面标志
-							      styles:{
-							        top:64//子页面顶部位置
-							      }
-						    }]
-						});
-						mui.plusReady(function(){
-							plus.nativeUI.showWaiting("  加 载 中 . . .   ",{back:"none",color:"#ffffff",background:"rgba(0,0,0,0.7)",loading:{display:"inline"}});
-							setTimeout(function(){
-								 plus.nativeUI.closeWaiting();
-							},3000)							
-						})
-						
-			</script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../contronller/createView.js"></script>
+<script type="text/javascript">
+	var embed=null,cw=null,muiHistoryLength=0;
+	// H5 plus事件处理
+	function plusReady(){
+		
+		embed=plus.webview.create('http://114.115.137.212', 'embed', {top:(parseInt(plus.navigator.getStatusbarHeight()||20)+44)+'px',bottom:'0px'});
+		cw = plus.webview.currentWebview();
+		cw.append(embed)
+		embed.addEventListener('loading',function(e,v){
+			  console.log(e);console.log(v);
+			  muiHistoryLength++;
+		},false)
+		console.log('----------------title');
+//		console.log(embed.titleText);console.log(embed.getTitle());
+	}
+	if(window.plus){
+		plusReady();
+	}else{
+		document.addEventListener('plusready', plusReady, false);
+	}
+</script>
+<script type="text/javascript">
+mui.back = function(){
+		if(muiHistoryLength>1){
+			muiHistoryLength -= 2;
+			embed.back();
+		}else if(cw){
+		    cw.close()	
+		}	
+}
+mui.plusReady(function(){
+	document.getElementById('back').addEventListener('click',function(){
+	     plus.nativeUI.closeWaiting();
+	     if(embed){
+	     	 embed.close();
+	     }
+	     plus.webview.currentWebview().close();
+	})
+})
+</script>
 </html>

@@ -1,37 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
-		<title>我的/个人中心</title>
+		<title>首页</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../model/index.css">
 		<style>
 			html,
 			body {
 				background-color: #efeff4;
 			}
-			.title {
-				padding: 20px 15px 10px;
-				color: #6d6d72;
-				font-size: 15px;
-				background-color: #fff;
-			}
+			/*-------------------*/
+             .homeList ul li:last-child a{border: 0;}
+             .homeList ul li a{position: relative;display: block;background: #fff;}
+             .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
+             .homeList ul li a .userImg{width: 29px;height: 29px;overflow: hidden;position: absolute;top:9px;left:10px;border-radius: 3px;}
+             .homeList ul li a .content{padding:5px 5px 5px 50px;}
+             .homeList ul li a h1{font-size: 15px;color:#333;line-height: 36px;}
+             .blog{margin-top:10px;}
+             .userImg i.mui-icon{font-size: 30px;}
+
 		</style>
 	</head>
+
 	<body>
+        <section class="homeList">
+              <div class="blog">
+					<ul>
+						<li>
+							<a href="#chat_1" data-wid="view/member/set.html" data-view="/view/member/set.html" class="mui-clearfix">
+								<div class="userImg">
+									<!--<img src="../../images/blog.jpg" width="100%" height="100%">-->
+									<i class="mui-icon mui-icon-gear"></i>
+								</div>
+								<div class="content">
+									<h1 class="mui-ellipsis">设置</h1>
+								</div>
+							</a>
+						</li>
+					</ul>
+              </div>
+              <div id="logout" style="margin-top:15px;" class="mui-text-center">
+					<button class="mui-btn mui-btn-danger" style="width: 90%;">退出</button>
+             </div>
+             
+
+		</section>
 		
-		
-		<div class="mui-text-center" style="margin-top:100px;" id="logout">
-			<button style="margin:100px;">退出登录</button>
-		</div>
-		<!--<div  class="mui-text-center" style="margin-top:100px;">
-			<button id="addFriends">添加朋友</button>
-		</div>-->
 		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.md5.js"></script>
 		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
 		<script src="../../contronller/createView.js"></script>
+		<script src="../../contronller/pages.js"></script>
+		<style type="text/css">
+			.mui-backdrop {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 998;background-color: rgba(0,0,0,.3);}
+		</style>
 		<script>
 			mui.init({
 				swipeBack: false,
@@ -39,51 +67,39 @@
 					backbutton: false //关闭back按键监听
 				}
 			});
-			mui.plusReady(function() {
-				mui('#logout').on('tap','button',function(){
-				     mui.ajax({
-					    	url:config.host+'/app/login/logout',
-					    	type:'post',
-					    	data:{
-					    		//config.userInfo.id
-					    		token:config.userInfo.token
-					    	},
-					    	success:function(data){
-					    		mui.toast(data.msg);
-					    		localStorage.removeItem('userInfo');
-								 setTimeout(function(){
-									 view.openWindow({view:'../login/login.html',wid:'../login/login.html'});
-								 },1500)
-					    	},
-					    	error:function(err){
-					    		console.log(err);
-					    		mui.toast('连接服务器失败')
-					    	}
-				     })
-				})
-//				mui('#addFriends').on('tap','button',function(){
-//				     mui.ajax({
-//					    	url:config.host+'/app/add/friendIsPass',
-//					    	type:'post',
-//					    	data:{
-//					    		ispass:1,
-//					    		uid:1,
-//					    		fid:2,
-//					    		afqid:1
-//					    	},
-//					    	success:function(data){
-//					    		console.log(data);
-//					    		mui.toast(data.msg);
-//					    	},
-//					    	error:function(err){
-//					    		console.log(err);
-//					    		mui.toast('连接服务器失败')
-//					    	}
-//				     })
-//				})
-			})
-			
-		</script>
-	</body>
 
+			mui.plusReady(function(){
+				 	//点击对应用户跳到用户详情
+					mui("body").on("tap", "a", function(e) {
+		                   var _this = this;
+		                   view.openWindow(_this);
+					});
+					mui('#logout').on('tap','button',function(){
+						 plus.nativeUI.showWaiting('退出中......',{back:"none"});
+					     mui.ajax({
+						    	url:config.host+'/app/login/logout',
+						    	type:'post',
+						    	data:{
+						    		//config.userInfo.id
+						    		token:config.userInfo.token
+						    	},
+						    	success:function(data){
+						    		mui.toast(data.msg);
+						    		localStorage.removeItem('userInfo');
+									 setTimeout(function(){
+									 	 plus.nativeUI.closeWaiting();
+										 view.openWindow({view: __root__+ pages.loginIndex,wid:pages.loginIndex});
+									 },500)
+						    	},
+						    	error:function(err){
+						    		console.log(err);
+						    		plus.nativeUI.closeWaiting();
+						    		mui.toast('连接服务器失败')
+						    	}
+					     })
+					})
+			})
+		</script>
+
+	</body>
 </html>

@@ -7,6 +7,9 @@
 		<meta name="MobileOptimized" content="320"/>
 		<title>顶部右边menu菜单导航</title>
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style type="text/css">
+			html{background: #333333;}
+		</style>
 	</head>
 	<body>
 		<div id="topBox"></div>
@@ -18,7 +21,15 @@
 			mui.plusReady(function() {
 	            var list = [];
 	            var menu = plus.webview.currentWebview().menu;
-	            
+	            function closeMenu(){
+				   	    setTimeout(function(){
+				   	    	if(plus.webview.getWebviewById('./index.html')){
+				   	    		plus.webview.getWebviewById('./index.html').setStyle({mask:"none"})
+				   	    		plus.webview.currentWebview().hide();
+				   	    	}			   	    	 
+				   	    	 
+				   	    },100)
+	            }
 	            //var _height = (50 * 3 + 30)+'px';//高*个数+box(padding)//侧滑页面高度（默认100%）
 	            // 如果增加/减少list - 》json 数据得去config配置文件修改topRightMenu
 	            switch(menu){
@@ -27,40 +38,17 @@
 								   {
 									   title:'添加好友',
 									   img:'../../images/60x60.gif',//img/icon二选一
-									   click:function(){									   	    
-									   	    setTimeout(function(){
-									   	    	 plus.webview.getWebviewById('./index.html').setStyle({mask:"none"})
-									   	    	 plus.webview.currentWebview().hide();
-									   	    },100)
-									   	    view.openWindow({view:'../add/friends.html',wid:'../add/friends.html',delay:500});
+									   click:function(){ 
+									   	    closeMenu();
+									   	    view.openWindow({view:'../add/friends.html',wid:'../add/friends.html',delay:200});
 									   }
 								   },
 								   {
-									   title:'',
+									   title:'扫一扫',
 									   icon:'mui-icon mui-icon-home',
 									   click:function(){
-									   	    alert('second');
-									   }
-								   },
-								   {
-									   title:'thrid',
-									   img:'../../images/60x60.gif',//img/icon二选一
-									   click:function(){
-									   	    alert('thrid');
-									   }
-								   },
-								   {
-									   title:'second',
-									   icon:'mui-icon mui-icon-home',
-									   click:function(){
-									   	    alert('second');
-									   }
-								   },
-								   {
-									   title:'thrid',
-									   img:'../../images/60x60.gif',//img/icon二选一
-									   click:function(){
-									   	    alert('thrid');
+									   	    closeMenu();
+									   	    view.openWindow({view:'../scan/index.html',wid:'scanIndex.html',delay:300});				
 									   }
 								   }
 							]

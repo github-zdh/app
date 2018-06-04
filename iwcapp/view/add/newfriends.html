@@ -132,7 +132,7 @@
 								    		uid:config.userInfo.id
 								    	},
 								    	success:function(data){
-								    		mui.toast(data.msg);
+								    		data = typeof data=='string'?JSON.parse(data):data;
 								    		if(data.code==200){
 		                                          console.log(JSON.stringify(data))
 		                                          var adduser = document.getElementById('adduser');
@@ -142,11 +142,14 @@
 		                                          	  li.innerHTML = addUserItem(data.result[i]);
 		                                          	  adduser.appendChild(li);
 		                                          }
+		                                          return false;
 								    		}
 								    		if(data.code==202){
 		                                          console.log(JSON.stringify(data))
-		                                          document.getElementById('noUser').style.display = 'block';                                              
+		                                          document.getElementById('noUser').style.display = 'block';   
+		                                          return false;
 								    		}
+								    		mui.toast(data.msg);
 								    		
 								    	},
 								    	error:function(err){

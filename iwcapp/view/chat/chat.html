@@ -12,7 +12,7 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<link rel="stylesheet" href="../../css/index.css">
 		<style>
-			  body{background: #f5f7f9;}
+			  html,body{background: #e9e9e9;}
 			  .mui-bar-nav{
 			 	background: #333333;
 			 	box-shadow: none;
@@ -30,6 +30,7 @@
 			 #socketContent .right .text:before{border-left: 10px solid #ffffff;right:-30px;}
 			 #socketContent .left .userimg{left: 0;}
 			 #socketContent .right .userimg{right: 0;}
+			 .content img{width:125px;max-width: 100%;}
 			 /*输入框*/
 			 .chatPull{position:relative;bottom: 0;width: 100%;left: 0;background: #FFFFFF;border-top:1px solid #C1C1C1;}
 			 .chatPull #chatmsg{width: 60%;border:0;border-bottom: 1px solid #c1c1c1;margin-left: 10px;border-radius: 0;}
@@ -76,7 +77,7 @@
 		<div id="openWindowHeader">
 			<header class="mui-bar mui-bar-nav">
 				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-				<h1 class="mui-title mui-text-left"></h1>
+				<h1 class="mui-title mui-text-left" id="title"></h1>
 				<a class="mui-icon-contact mui-icon mui-pull-right"></a>
 			</header>
 		</div>
@@ -133,7 +134,7 @@
 					}
 				});
 				 mui.previewImage();
-				
+
 
 //			    //关闭等待框
 //			     plus.nativeUI.closeWaiting();
@@ -144,7 +145,7 @@
 //				 mui.scrollTo(100000,300);	
 
 
-			mui.plusReady(function() {
+			mui.plusReady(function() {						
 				// 隐藏滚动条
 				plus.webview.currentWebview().setStyle({scrollIndicator:'none'});
 				//加载动画
@@ -189,8 +190,51 @@
 		<script src="../../socket.io/socket.io.js"></script>
 		<!--<script src="https://lib.baomitu.com/socket.io/2.1.1/socket.io.js"></script>-->
 		<script type="text/javascript">
-			mui.plusReady(function() {
-				    document.getElementById('flex-container').style.top = view.headerHeight + 'px';
+			// mui.plusReady(function() {
+				    // document.getElementById('flex-container').style.top = view.headerHeight + 'px';
+					//查询最近十条消息
+				    function getChatRecord(rid,uid,page,pageSize){				    	
+					    mui.ajax({
+						    	url:config.host+'/app/search/ChatRecord',
+//						    	url:'http:127.0.0.1/app/search/ChatRecord',						    	
+						    	type:'post',
+						    	data:{
+						    		rid:rid,
+						    		page:page,
+						    		pageSize:pageSize
+						    	},
+						    	success:function(data){
+//						    		alert(JSON.stringify(data));
+						    		var result = JSON.parse(data).result;
+						    		for(var i= 0;i<result.length ;i++){
+							    			 
+							    			 var msg = JSON.parse(result[i].msg);
+							    			 var type = 2;
+							    			 if(uid==msg['from']['id']){
+							    			 	 type = 1;
+							    			 }
+							    			 socEl(type,null,msg,null,msg.msg,null,true)						    			 
+						    		}
+					    			 //防止多次加载
+					    			 if(!getChatRecordIsLoading){
+					    			 	  getChatRecordIsLoading=true;
+					    			 }
+					    			 //移除消息加载动画
+//					    			 alert(removeMsgLoading);
+					    			 if(removeMsgLoading){
+					    			 	removeMsgLoading()
+					    			 }
+						    	},
+						    	error:function(err){
+						    		// addRoomChatItemsLocalStorageNum(rid,num);
+						    		console.log(err);
+						    		mui.toast('连接服务器失败')
+						    	}
+					    })
+				    }
+				    
+				    
+				    document.getElementById('flex-container').style.top = '64px';
 				    var chat_id = '';
 				    var getStyle = function(el,type,px){
 				    	var _this = '';
@@ -198,8 +242,7 @@
 				    		 _this = window.getComputedStyle(el,false)[type];
 				    	}else{
 				    		_this = el.currentStyle[type];
-				    	}
-				    	
+				    	}				    	
 				    	return _this.indexOf('px')>-1 && px ? Number(_this.split('px')[0]) : _this;	    	
 				    }				    
 				    var scrollBottom = function(){
@@ -212,38 +255,121 @@
 				    	   return document.getElementById(el)
 				    };
 				    //type 1 自己 right 2=>left 别人  3=》说明
-				    var socEl = function(type,chat_id,data,uname,html,cb){
+				    var socEl = function(type,chat_id,data,uname,html,cb,insertBefore){
 				    	  var el = document.createElement('section');
-				    	  el.innerHTML = html;
-				    	  var imageUrl = '../../images/shuijiao.jpg';
-				    	  if(uname=='user_1'){
-				    	    	imageUrl = '../../images/shuijiao.jpg';
+//				    	  alert(html);
+				    	  html = html.replace(/\\"/g,'"');
+				    	  html = common.restoreEmoji(html);
+				    	  var imghtmlreg = /^<img.+>$/g;
+				    	  console.log('imghtmlreg.test(html)----------->'+!!imghtmlreg.test(html))
+				    	  
+				    	  if(!!imghtmlreg.test(html)){
+				    	  	   var _html = html.split('src');
+				    	  	   html = _html[0]+' data-preview-src="" data-preview-group="1" src'+_html[1];
 				    	  }
-				    	  if(uname=='user_2'){
-				    	    	imageUrl = '../../images/yuantiao.jpg';
-				    	  }
+				    	  console.log('html --- '+html);
+				    	  
+				    	  var imageUrl = data&&data['from']?'http://114.115.137.212'+data['from']['user_img']:'';
+				    	  var username = data&&data['from']?'<div class="mui-ellipsis">'+data['from']['username']+'</div>':'';
+				    	  console.log(data);
 				    	  switch(type){
 				    	  	  case 1:		    	  	     
-				    	  	     el.innerHTML = '<div class="noLoopIcon right mui-clearfix mui-text-right" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content"><div class="text mui-text-left">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
+				    	  	     el.innerHTML = '<div class="noLoopIcon right mui-clearfix mui-text-right" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content">'+username+'<div class="text mui-text-left">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
 				    	  	  break;
 				    	  	  case 2:
-				    	  	     el.innerHTML = '<div class="noLoopIcon left mui-clearfix" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content"><div class="text mui-text-left">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
+				    	  	     el.innerHTML = '<div class="noLoopIcon left mui-clearfix" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content">'+username+'<div class="text mui-text-left">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
 				    	  	  break;
 				    	  	  case 3:
 				    	  	     el.innerHTML = '<div class="mui-text-center" style="padding: 10px;color: #666666;font-size:12px;">'+html+'</div>';
 				    	  	  break;
 				    	  }
-				    	  socDom('socketContent').appendChild(el);
+				    	  if(insertBefore){
+				    	  	    var sectionEl = socDom('socketContent').getElementsByTagName('section')[0];
+//				    	  	    console.log('sectionEl--------------------->'+sectionEl);
+				    	  	    if(!sectionEl){
+				    	  	    	  socDom('socketContent').appendChild(el);
+				    	  	    }else{
+				    	  	    	socDom('socketContent').insertBefore(el,sectionEl);
+				    	  	    }
+				    	  }else{
+				    	  	   socDom('socketContent').appendChild(el);
+				    	  }
+				    	  
 				    	  if(cb){cb()}
+				    	  
 				    }
-				     var localhost = 'http://localhost:3000/room';
-//				    var localhost = 'http://114.115.137.212:3000/room';    
+				     // var localhost = 'http://127.0.0.1:3000/room';
+				    var localhost = 'http://114.115.137.212:3000/room';    
 				    var url = window.location.href.split('?room=')[1].split('&uid=');
-				    document.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = 'room_'+url[0]+'/user_'+url[1];
+				    var rid = url[0];
+				    var uid = url[1];
+				     mui.ajax({
+					    	url:config.host+'/app/search/user',
+					    	type:'post',
+					    	data:{
+					    		uid:uid
+					    	},
+					    	success:function(data){				    		
+					    		data = JSON.parse(data);
+					    		if(data.code==200){
+					    			document.getElementById('title').innerHTML = data.result.username;
+					    		}else{
+					    			mui.toast(data.msg);
+					    		}				    		
+					    	},
+					    	error:function(err){
+					    		console.log(err);
+					    		mui.toast('连接服务器失败')
+					    	}
+				     })
+//				    document.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = 'room_'+url[0]+'/user_'+url[1];
+		  	   		//触发首页清空未读消息
+					mui.plusReady(function() {
+						mui.fire(plus.webview.getWebviewById("home"), 'customEvent', {
+						     	rid:rid,
+						     	num:0
+						});
+					})
+					//查询最近十条消息
+				    var getChatRecordPage = 1;
+				    var getChatRecordPageSize = 10;
+				    var getChatRecordIsLoading = true;//阻止多次加载
+				    getChatRecord(rid,uid,getChatRecordPage,getChatRecordPageSize);
+				    socDom('socketContent').addEventListener('scroll',function(e){
+//				    	console.log(e.srcElement.scrollTop);
+                        if(e.srcElement.scrollTop<100&&getChatRecordIsLoading){
+                        	 getChatRecordIsLoading = false;
+                        	 getChatRecordPage++;
+                        	 addMsgLoading();
+                        	 getChatRecord(rid,uid,getChatRecordPage,getChatRecordPageSize);
+                        }
+				    })
+				    //消息加载动画
+				    function addMsgLoading(){
+				    	    var el = document.createElement('div');
+				    	    el.id = 'msgLoading';
+				    	    el.style = 'text-align: center;padding: 10px;color:#666;';
+				    	    el.innerHTML = '<i class="mui-icon mui-icon-spinner mui-spin loop-mymove" style="font-size: 16px;"></i> 加载中...';
+			    	  	    var sectionEl = socDom('socketContent').getElementsByTagName('section')[0];
+			    	  	    if(!sectionEl){
+			    	  	    	  socDom('socketContent').appendChild(el);
+			    	  	    }else{
+			    	  	    	socDom('socketContent').insertBefore(el,sectionEl);
+			    	  	    }
+				    }
+				    //移除消息加载动画
+				    function removeMsgLoading(){
+				    	var sectionEl = document.getElementById('msgLoading');
+				    	if(sectionEl){
+				    		socDom('socketContent').removeChild(sectionEl);
+				    	}
+				    }
+				    
+//				    getChatRecord(rid,uid,1,10);
 				    var room = io.connect(localhost);
 				    room.on('connect',function(){
 					 	//连接成功
-					 	room.emit('room join',{roomID:url[0],uIndex:url[1]});
+					 	room.emit('room join',{rid:rid,uid:uid});
 					 });  
 				    room.on('room sys', function (data,ioRooms,room) {
 		//		         socEl(data)
@@ -252,34 +378,54 @@
 		
 				    room.on('room msg', function (data) {
 			    	    	var type = 1;
-			    	    	if(data['from']['username']!='user_'+url[1]){
+			    	    	if(data['from']['id'] != uid){
 			    	    		type = 2;
 			    	    	}
+			    	    	
 			                socEl(type,chat_id,data,data['from']['username'],data['msg']);
 			                scrollBottom();
+//			                alert(JSON.stringify(data))
+							mui.plusReady(function() {
+								mui.fire(plus.webview.getWebviewById("home"), 'customEvent', {
+								     	rid:rid,
+								     	msg:data
+								});
+							}) 
 				    });
 				    // 未读消息
 				    room.on('room unread',function(data){
 				    	    // console.log('room unread-------'+JSON.stringify(data));
+				    	     console.log(data);
 				    	    for(var i=0;i<data.length;i++){
 				    	    	var type = 1;
-				    	    	if(data[i]['from']['username']!='user_'+url[1]){
+				    	    	// console.log(data[i]);
+				    	    	// console.log("data[i]['from']['id']---"+data[i]['from']['id']);
+				    	    	// console.log('uid---'+uid);
+				    	    	var _data = JSON.parse(data[i]);
+				    	    	console.log(_data);
+				    	    	if(_data['from']['id'] != uid){
 				    	    		type = 2;
 				    	    	}
-		                        socEl(type,new Date().getTime(),null,data[i]['from']['username'],data[i]['msg']);
+		                        socEl(type,new Date().getTime(),_data,_data['from']['username'],_data['msg']);
 				    	    }
 				    	    scrollBottom();		    	    
 				    })
 				    socDom('send').addEventListener('click',function(){
-				    	    chat_id = 'chat_'+new Date().getTime();
-				    	    document.getElementById('chatmsg').focus();
 				    	    var sendMsg = socDom('chatmsg').value;
 		//		    	    console.log(sendMsg);
 				    	    if(sendMsg==''){
 				    	    	return false;
 				    	    }
 				    	    socDom('chatmsg').value = '';
-				    	    room.emit('room sendMsg', {sendMsg:sendMsg,chat_id:chat_id} ,function(data){
+				    	    sendMsg = common.replaceEmoji(sendMsg);
+				    	    emitSendMsg({sendMsg:sendMsg});
+				    })
+				    //触发发送消息
+				    function emitSendMsg(data){
+				    	    chat_id = 'chat_'+new Date().getTime();
+				    	    document.getElementById('chatmsg').focus();
+				    	    data.chat_id = chat_id;
+				    	    room.emit('room sendMsg', data ,function(data){
 //				    	    	  alert(JSON.stringify(data));
 				    	    	  var noLoopIcon = socDom(data.chat_id).className;
 				    	    	  if(noLoopIcon&&noLoopIcon.indexOf('noLoopIcon')<0){
@@ -287,22 +433,40 @@
 				    	    	  	   		socDom(data.chat_id).className = noLoopIcon+' noLoopIcon';
 				    	    	  	   		clearTimeout(noLoopIconTimeout);
 				    	    	  	   	},600)
-				    	    	  }				    	    	 
+				    	    	  }
+		    	    	 
 				    	    });
-				    })
+				    }
+
 				    socDom('chatmsg').addEventListener('focus',function(){		    	  
 		                    scrollBottom();		   
 				    })
+				    var oldValue = '';
 				    socDom('chatmsg').addEventListener('keyup',function(){		    	  
 		//		    	  console.log(this.value!='');
+                          
+                          //搜狗输入法表情图片
+                          var emojiReg = /http:\/\/pinyin.cn\/e\d+/g;
 				    	  if(this.value!=''){
 				    	  	  socDom('send').className = 'mui-btn-blue';
 				    	  }else{
 				    	  	  socDom('send').className = '';
-				    	  }
+				    	  } 
+				    	  var matchEmojiReg = this.value.match(emojiReg);
+				    	  console.log(matchEmojiReg);
+				    	  if(matchEmojiReg){
+				    	  	  this.value = oldValue;
+				        	  common.sougouEmojiImg(String(matchEmojiReg),function(img){
+//				        	       alert(img);
+				        	       emitSendMsg({sendMsg:img,type:'img'});
+				              })
+				    	  }else{
+				    	  	  oldValue = this.value;
+				    	  }		
 				    })
-			 })
+			 // })
 		</script>
+
 	</body>
 
 </html>

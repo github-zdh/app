@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -7,25 +6,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
- 		<script type="text/javascript">
- 			if(window.plus){
-				plusReady();
-			}else{
-				document.addEventListener('plusready', plusReady, false);
-			}
-			// 监听Webview窗口页面加载完成事件
-			function plusReady() {
-				// 打开新窗口
-				 var userInfo = window.localStorage.getItem('userInfo');
-				 if(userInfo){
-				 	  index = plus.webview.create('./index.html', './index.html');
-				 	  index.show();				 	  
-				 }else{
-				 	  login = plus.webview.create('./view/login/login.html','login.html');	
-				 	  login.show();
-				 }
-			}
- 		</script>	 		
 		<link rel="stylesheet" href="./css/mui.min.css">
 		<link rel="stylesheet" href="./css/style.css">
 		<link rel="stylesheet" href="./css/index.css">
@@ -48,48 +28,18 @@
 		<script src="./contronller/createView.js"></script>
 		
 		<script>
-//				
-//				mui.init();	
-//				mui.plusReady(function() {
-//					 
-//					 var isFirst = window.localStorage.getItem('isFirst');
-//					 if(isFirst){
-//					 	  setTimeout(function(){
-////					 	  	  openView('./index.html')
-//					 	  },300)					 	  
-//					 }
-//					 document.getElementById('content').style.display = 'block';
-//					 document.getElementById('openWindow').style.display = 'block';
-//					 
-//					 var getId = function(el){
-//					 	  return document.getElementById(el);
-//					 }
-//					 var getStyle = function(obj,type){
-//					 	  if(window.getComputedStyle){
-//					 	  	  return window.getComputedStyle(obj,false)[type];
-//					 	  }else{
-//					 	  	  return obj.currentStyle[type];
-//					 	  }
-//					 }	
-//					 var addEventListener = function(obj,type,cb){
-//					 	 if(window.addEventListener){
-//					 	 	  obj.addEventListener(type,cb)
-//					 	 }else{
-//					 	 	  obj.attachEvent('on'+type,cb);
-//					 	 }
-//					 }
-//					 function openView(url){
-//					 	  view.openWindow({view:url,wid:url});					 	  
-//					 }
-////					 openView('./index.html')
-//					 
-//					 addEventListener(getId('login'),'click',function(){
-//					 	   openView('./view/login/login.html')
-//					 })
-//					 addEventListener(getId('index'),'click',function(){
-//					 	   openView('./index.html')
-//					 })
-//              })
+				mui.init();	
+				mui.plusReady(function() {
+					 function openView(url){
+					 	  view.openWindow({view:url,wid:url});					 	  
+					 }
+					 addEventListener(getId('login'),'click',function(){
+					 	   openView(common.loginIndex)
+					 })
+					 addEventListener(getId('index'),'click',function(){
+					 	   openView(common.index)
+					 })
+                })
         </script>
 	</body>
 

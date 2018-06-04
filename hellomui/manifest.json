@@ -177,7 +177,18 @@
 					"list.html"
 				],
 				"refer": [
-					"index-menu.html"
+					"index-menu.html",
+					"examples/guide.html",
+					"examples/info.html",
+					"examples/accordion.html",
+					"examples/actionsheet.html",
+					"examples/actionsheet-plus.html",
+					"examples/ajax.html",
+					"examples/setting.html",
+					"examples/buttons.html",
+					"examples/card.html",
+					"examples/badges.html",
+					"examples/checkbox.html"
 				],
 				"priority": 0
 			},
@@ -327,7 +338,11 @@
 					"css/mui.min.css"
 				],
 				"refer": [
-					"examples/offcanvas-drag-left.html"
+					"examples/offcanvas-drag-left.html",
+					"examples/pullrefresh_main.html",
+					"examples/tab-with-viewpagerindicator.html",
+					"examples/switches.html",
+					"examples/tableviews-with-swipe.html"
 				],
 				"priority": 0
 			},

@@ -1,154 +1,170 @@
 {
-	"index.html": {
-		"resources": [
-			"view/tab-top-subpage-1.html",
-			"view/tab-top-subpage-3.html",
-			"js/mui.min.js",
-			"view/home.html",
-			"view/home/index.html",
-			"view/home/mail.html",
-			"view/home/member.html",
-			"contronller/common.js",
-			"contronller/init.js",
-			"contronller/config.js",
-			"contronller/createView.js",
-			"contronller/back.js"
-		],
-		"refer": [
-			"view/tab-top-subpage-1.html",
-			"view/tab-top-subpage-2.html",
-			"view/tab-top-subpage-3.html",
-			"view/tab-top-subpage-4.html",
-			"view/side.html",
-			"view/topRightMenu.html",
-			"view/home.html",
-			"view/member.html",
-			"view/mail.html",
-			"view/discover.html",
-			"view/home/index.html",
-			"view/home/discover.html",
-			"view/home/member.html",
-			"view/home/mail.html",
-			"view/home/tr.menu.html",
-			"view/home/blog.html",
-			"view/demo/previewImage.html",
-			"view/login/login.html"
-		]
-	},
-	"view/home.html": {
-		"refer": [
-			"view/topRightMenu.html",
-			"view/chat.html",
-			"view/index.html"
-		],
-		"resources": []
-	},
-	"view/index.html": {
-		"resources": [
-			"view/chat.html",
-			"view/header.html"
-		],
-		"refer": [
-			"view/chat.html",
-			"view/include/header.html"
-		]
-	},
-	"view/discover.html": {
-		"refer": [
-			"view/chat.html"
-		],
-		"resources": []
-	},
-	"view/home/index.html": {
-		"refer": [
-			"view/mask.html",
-			"view/chat/chat.html",
-			"view/chat/chat1.html",
-			"view/chat/ch.html",
-			"view/login/login.html"
-		],
-		"resources": []
-	},
-	"view/home/discover.html": {
-		"refer": [
-			"view/home/index.html",
-			"view/blog/index.html"
-		],
-		"resources": []
-	},
-	"view/chat/chat.html": {
-		"resources": [
-			"css/previewImage.css"
-		],
-		"refer": []
-	},
-	"view/home/blog.html": {
-		"refer": [
-			"view/home/index.html"
-		],
-		"resources": []
-	},
-	"view/blog/index.html": {
-		"refer": [
-			"view/blog/blog.html"
-		],
-		"resources": [
-			"view/blog/iframe.html"
-		]
-	},
-	"view/blog/blog.html": {
-		"refer": [
-			"view/blog/blogs.html"
-		],
-		"resources": []
-	},
-	"view/blog/blogs.html": {
-		"refer": [
-			"view/blog/blog.html"
-		],
-		"resources": []
-	},
-	"view/login/login.html": {
-		"refer": [
-			"view/home/index.html",
-			"index.html"
-		],
-		"resources": []
-	},
-	"boot.html": {
-		"refer": [
-			"view/login/login.html",
-			"index.html"
-		],
-		"resources": [
-			"contronller/common.js",
-			"contronller/config.js",
-			"contronller/createView.js"
-		]
-	},
-	"view/home/member.html": {
-		"refer": [
-			"view/login/login.html"
-		]
-	},
-	"view/home/tr.menu.html": {
-		"refer": [
-			"view/add/friends.html"
-		]
-	},
-	"view/home/mail.html": {
-		"refer": [
-			"view/member/userInfo.html",
-			"view//chat/chat.html",
-			"view//add/friends.html",
-			"view/add/friends.html",
-			"view/add/newfriends.html"
-		]
-	},
-	"view/member/userInfo.html": {
-		"refer": [
-			"view//chat/chat.html",
-			"view/chat/chat.html"
-		]
-	}
+  "index.html": {
+    "resources": [
+      "view/tab-top-subpage-1.html",
+      "view/tab-top-subpage-3.html",
+      "js/mui.min.js",
+      "view/home.html",
+      "view/home/index.html",
+      "view/home/mail.html",
+      "view/home/member.html",
+      "contronller/common.js",
+      "contronller/init.js",
+      "contronller/config.js",
+      "contronller/createView.js",
+      "contronller/back.js"
+    ],
+    "refer": [
+      "view/tab-top-subpage-1.html",
+      "view/tab-top-subpage-2.html",
+      "view/tab-top-subpage-3.html",
+      "view/tab-top-subpage-4.html",
+      "view/side.html",
+      "view/topRightMenu.html",
+      "view/home.html",
+      "view/member.html",
+      "view/mail.html",
+      "view/discover.html",
+      "view/home/index.html",
+      "view/home/discover.html",
+      "view/home/member.html",
+      "view/home/mail.html",
+      "view/home/tr.menu.html",
+      "view/home/blog.html",
+      "view/demo/previewImage.html",
+      "view/login/login.html",
+      "view/login/index.html"
+    ]
+  },
+  "view/home.html": {
+    "refer": [
+      "view/topRightMenu.html",
+      "view/chat.html",
+      "view/index.html"
+    ],
+    "resources": []
+  },
+  "view/index.html": {
+    "resources": [
+      "view/chat.html",
+      "view/header.html"
+    ],
+    "refer": [
+      "view/chat.html",
+      "view/include/header.html"
+    ]
+  },
+  "view/discover.html": {
+    "refer": [
+      "view/chat.html"
+    ],
+    "resources": []
+  },
+  "view/home/index.html": {
+    "refer": [
+      "view/mask.html",
+      "view/chat/chat.html",
+      "view/chat/chat1.html",
+      "view/chat/ch.html",
+      "view/login/login.html"
+    ],
+    "resources": []
+  },
+  "view/home/discover.html": {
+    "refer": [
+      "view/home/index.html",
+      "view/blog/index.html"
+    ],
+    "resources": []
+  },
+  "view/chat/chat.html": {
+    "resources": [
+      "css/previewImage.css"
+    ],
+    "refer": []
+  },
+  "view/home/blog.html": {
+    "refer": [
+      "view/home/index.html"
+    ],
+    "resources": []
+  },
+  "view/blog/index.html": {
+    "refer": [
+      "view/blog/blog.html"
+    ],
+    "resources": [
+      "view/blog/iframe.html"
+    ]
+  },
+  "view/blog/blog.html": {
+    "refer": [
+      "view/blog/blogs.html"
+    ],
+    "resources": []
+  },
+  "view/blog/blogs.html": {
+    "refer": [
+      "view/blog/blog.html"
+    ],
+    "resources": []
+  },
+  "view/login/login.html": {
+    "refer": [
+      "view/home/index.html",
+      "index.html"
+    ],
+    "resources": []
+  },
+  "boot.html": {
+    "refer": [
+      "view/login/login.html",
+      "index.html"
+    ],
+    "resources": [
+      "contronller/common.js",
+      "contronller/config.js",
+      "contronller/createView.js"
+    ]
+  },
+  "view/home/member.html": {
+    "refer": [
+      "view/login/login.html",
+      "view/login/index.html",
+      "view/blog/index.html",
+      "view/member/set.html"
+    ]
+  },
+  "view/home/tr.menu.html": {
+    "refer": [
+      "view/add/friends.html",
+      "view/scan/index.html"
+    ]
+  },
+  "view/home/mail.html": {
+    "refer": [
+      "view/member/userInfo.html",
+      "view//chat/chat.html",
+      "view//add/friends.html",
+      "view/add/friends.html",
+      "view/add/newfriends.html",
+      "view/add/GroupChat.html"
+    ]
+  },
+  "view/member/userInfo.html": {
+    "refer": [
+      "view//chat/chat.html",
+      "view/chat/chat.html"
+    ]
+  },
+  "view/add/GroupChat.html": {
+    "refer": [
+      "view/chat/chat.html"
+    ]
+  },
+  "view/member/set.html": {
+    "refer": [
+      "view/login/index.html"
+    ]
+  }
 }

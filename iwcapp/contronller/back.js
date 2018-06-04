@@ -1,24 +1,19 @@
 (function(w){
-   w.muiBackBool = false;
    var muiBack = function(){};
+   muiBack.prototype.muiBackBool = false;
    muiBack.prototype.loginBack = function(){
-			var muiCurrentWebview = plus.webview.currentWebview();
-			var allview =  plus.webview.all();
-			for(var i=0;i<allview.length;i++){
-				//HBuilder
-		 	    if(allview[i].id!=muiCurrentWebview.id){
-					 allview[i].close();		
-			    }
-			}
-			if(window.muiBackBool){
-				muiCurrentWebview.close();
+			if(this.muiBackBool){
+			    var allview =  plus.webview.all();
+				for(var i=0;i<allview.length;i++){
+			 	     allview[i].close();
+				}
 			}else{
 				mui.toast('再点击一次退出');
 			}
-			window.muiBackBool = true;
+			this.muiBackBool = true;
 			clearTimeout(muiBackBoolTimeout);
 			var muiBackBoolTimeout = setTimeout(function(){
-				window.muiBackBool = false;
+				this.muiBackBool = false;
 				clearTimeout(muiBackBoolTimeout);
 			},3000)	
    }
@@ -31,15 +26,15 @@
 					 allview[i].close();		
 			    }
 			}
-			if(window.muiBackBool){
+			if(this.muiBackBool){
 				muiCurrentWebview.close();
 			}else{
 				mui.toast('再点击一次退出');
 			}
-			window.muiBackBool = true;
+			this.muiBackBool = true;
 			clearTimeout(muiBackBoolTimeout);
 			var muiBackBoolTimeout = setTimeout(function(){
-				window.muiBackBool = false;
+				this.muiBackBool = false;
 				clearTimeout(muiBackBoolTimeout);
 			},3000)	
    }

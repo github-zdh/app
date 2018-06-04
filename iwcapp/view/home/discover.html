@@ -14,36 +14,41 @@
 			body {
 				background-color: #efeff4;
 			}
-			.title {
-				padding: 20px 15px 10px;
-				color: #6d6d72;
-				font-size: 15px;
-				background-color: #fff;
-			}
-			#pullrefresh{overflow-y: scroll;}
 			/*-------------------*/
+             .homeList ul li:last-child a{border: 0;}
              .homeList ul li a{position: relative;display: block;background: #fff;}
              .homeList ul li a{border-bottom: 1px solid #e1e1e1;}
-             .homeList ul li a .userImg,.homeList ul li a .time{width: 44px;height: 44px;overflow: hidden;position: absolute;top:7px;left:10px;border-radius: 3px;}
-             .homeList ul li a .msg{position:absolute;top:3px;left:54px;z-index:1000;font-size: 10px;color:#fff;}
-             .homeList ul li a .msg .mui-badge{line-height: 1;padding-top:3px;}
-             .homeList ul li a .content{padding:7px 70px 7px 65px;}
-             .homeList ul li a h1,.homeList ul li a p{overflow: hidden;text-overflow: ellipsis;white-space:nowrap;}
-             .homeList ul li a h1{font-size: 16px;color:#333;line-height: 24px;}
-             .homeList ul li a p,.homeList ul li a .time{font-size: 12px;color:#999;}
-             .homeList ul li a div.time{width: 55px;right: 10px;left:auto;font-size:11px;text-align:right;}
-             .homeList ul li a .time span{font-size: 24px;color:#ccc;}
+             .homeList ul li a .userImg{width: 29px;height: 29px;overflow: hidden;position: absolute;top:9px;left:10px;border-radius: 3px;}
+             .homeList ul li a .content{padding:5px 5px 5px 50px;}
+             .homeList ul li a h1{font-size: 15px;color:#333;line-height: 36px;}
+             .blog{margin-top:10px;}
+
 		</style>
 	</head>
 
 	<body>
-		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-			<div class="mui-scroll">
-				 <section id="mnp">
-				 	  <button  type="button" class="mui-btn mui-btn-primary" style="width: 100%;margin-top:30px;">博客</button>
-				 </section>
-			</div>
-		</div>
+        <section class="homeList">
+              <div class="blog">
+					<ul>
+						<li>
+							<a href="#chat_1" data-wid="view/blog/index.html" data-view="/view/blog/index.html" class="mui-clearfix">
+								<div class="userImg">
+									<img src="../../images/blog.jpg" width="100%" height="100%">
+								</div>
+								<div class="content">
+									<h1 class="mui-ellipsis">博客</h1>
+								</div>
+							</a>
+						</li>
+					</ul>
+              </div>
+              <ul id="mail"></ul>
+              <div id="noFriends" class="mui-text-center" style="padding:30px 0;color:#999999;display: none;">
+              	  还有没有好友？<br/>
+              	 <a style="display: inline-block;margin-top:10px;" data-wid="../add/friends.html" data-view="../add/friends.html">添加好友</a>
+              </div>
+		</section>
+		
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/mui.md5.js"></script>
 		<script src="../../contronller/config.js"></script>
@@ -60,57 +65,14 @@
 				}
 			});
 
-//			var view = new plus.nativeObj.View(id, styles, tags);
-			
-			mui("#mnp").on("tap", "button", function(e) {
-		            // 创建view
-					plus.nativeUI.showWaiting("",{back:"none",color:"#FF0000",background:"rgba(0,0,0,0)",loading:{display:"none"}});
-					mui.openWindow({
-						  url: '../blog/index.html',
-						  id: '../blog/index.html',
-						  styles: {                             // 窗口参数 参考5+规范中的WebviewStyle,也就是说WebviewStyle下的参数都可以在此设置
-						    titleNView: {                       // 窗口的标题栏控件
-						      titleText:"ZDH",                // 标题栏文字,当不设置此属性时，默认加载当前页面的标题，并自动更新页面的标题
-						      autoBackButton:true,
-						      titleColor:"#ffffff",             // 字体颜色,颜色值格式为"#RRGGBB",默认值为"#000000"
-						      titleSize:"17px",                 // 字体大小,默认17px
-						      backgroundColor:"#000000",        // 控件背景颜色,颜色值格式为"#RRGGBB",默认值为"#F7F7F7"
-						      progress:{                        // 标题栏控件的进度条样式
-						        color:"#00FF00",                // 进度条颜色,默认值为"#00FF00"  
-						        height:"2px"                    // 进度条高度,默认值为"2px"         
-						      },
-						      splitLine:{                       // 标题栏控件的底部分割线，类似borderBottom
-						        color:"#CCCCCC",                // 分割线颜色,默认值为"#CCCCCC"  
-						        height:"0px"                    // 分割线高度,默认值为"2px"
-						      },
-//						      back:{//左上角返回箭头
-//							        image:{//图片格式
-//							            base64Data:''//加载图片的Base64编码格式数据 base64Data 和 imgSRC 必须指定一个.否则不显示返回箭头
-//							        }
-//							  }
-						    }
-						  },
-						  show:{
-						  	  autoShow:true,//页面loaded事件发生后自动(是否)显示，默认为true
-						  	  aniShow:'pop-in',
-						      duration:200//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
-						  },
-						  waiting:{
-						      autoShow:false,//自动显示等待框，默认为true
-						  }
+			mui.plusReady(function(){
+				 	//点击对应用户跳到用户详情
+					mui("body").on("tap", "a", function(e) {
+		                   var _this = this;
+		                   view.openWindow(_this);
 					});
-					
-			});
-
-
+			})
 		</script>
-		
-        <!--通知栏-->
-        <!--<script type="text/javascript">
-        	 mui.plusReady(function(){            	
-			       plus.runtime.setBadgeNumber( 0 );
-			       plus.push.createMessage( '1234567987/765431asdfasdjklfasdf哈哈哈哈哈哈' );
-            })
-        </script>-->
+
 	</body>
 </html>
