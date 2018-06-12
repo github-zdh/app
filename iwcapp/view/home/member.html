@@ -23,14 +23,26 @@
              .homeList ul li a h1{font-size: 15px;color:#333;line-height: 36px;}
              .blog{margin-top:10px;}
              .userImg i.mui-icon{font-size: 30px;}
+             .homeList ul li a h1#nickname{line-height: 26px;margin-top:9px;}
+             ul.userinfo .mui-navigate-right:after{content:''};
 
 		</style>
 	</head>
-
 	<body>
         <section class="homeList">
               <div class="blog">
-					<ul>
+              	   	<ul class="userinfo">
+						<li class="mui-table-view-cell mui-media">
+								<a class="mui-navigate-right">
+									<img id="user_img" class="mui-media-object mui-pull-left head-img" id="head-img" src="../../images/60x60.gif" width="50px" height="50px" style="margin-right: 10px;margin-top:5px;border-radius: 5px;">
+									<div class="mui-media-body" style="margin-right:15px;">
+										<h1 class="mui-ellipsis" id="nickname" style="font-size: 17px;"></h1>
+										<p class="mui-ellipsis">账号:<span id="username"></span></p>
+									</div>
+								</a>
+						</li>
+					</ul>
+					<ul style="margin-top:15px;">
 						<li>
 							<a href="#chat_1" data-wid="view/member/set.html" data-view="/view/member/set.html" class="mui-clearfix">
 								<div class="userImg">
@@ -44,8 +56,8 @@
 						</li>
 					</ul>
               </div>
-              <div id="logout" style="margin-top:15px;" class="mui-text-center">
-					<button class="mui-btn mui-btn-danger" style="width: 90%;">退出</button>
+              <div id="logout" style="margin-top:30px;" class="mui-text-center">
+					<button class="mui-btn mui-btn-danger" style="width: 95%;">退出</button>
              </div>
              
 
@@ -67,7 +79,19 @@
 					backbutton: false //关闭back按键监听
 				}
 			});
-
+            console.log(JSON.stringify(config.userInfo))
+            userInfoFn();
+            function userInfoFn(){
+            	 if(config.userInfo.user_img){
+            	 	  document.getElementById('user_img').src = config.host+config.userInfo.user_img;
+            	 }
+            	 if(config.userInfo.username){
+            	 	  document.getElementById('username').innerHTML = config.userInfo.username;
+            	 }
+            	 if(config.userInfo.nickname){
+            	 	  document.getElementById('nickname').innerHTML = config.userInfo.nickname;
+            	 }
+            }
 			mui.plusReady(function(){
 				 	//点击对应用户跳到用户详情
 					mui("body").on("tap", "a", function(e) {

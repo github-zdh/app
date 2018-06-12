@@ -24,7 +24,7 @@
 			 #socketContent{padding:10px;height:100%;font-size: 15px;overflow: scroll;}
 			 #socketContent .left,#socketContent .right{position: relative;padding-right: 60px;padding-left: 60px;margin-top:10px;}
 			 #socketContent .left .userimg,#socketContent .right .userimg{width:44px;height:44px;border-radius: 5px;position: absolute;top:0;}
-			 #socketContent .left .text,#socketContent .right .text{display: inline-block;word-break: break-word;background: #FFFFFF;/*padding:10px 15px;*/padding:5px;line-height:24px;border-radius: 5px;position: relative;}
+			 #socketContent .left .text,#socketContent .right .text{display: inline-block;word-break: break-word;background: #FFFFFF;padding:10px 15px;line-height:24px;border-radius: 5px;position: relative;}
 			 #socketContent .left .text:before,#socketContent .right .text:before{position:absolute;top: 12px;width:10px;height:0px;content: '';border-bottom: 10px solid transparent;border-top: 10px solid transparent;border-left: 10px solid transparent;border-right: 10px solid transparent;}
 			 #socketContent .left .text:before{border-right: 10px solid #ffffff;left:-30px;}
 			 #socketContent .right .text:before{border-left: 10px solid #ffffff;right:-30px;}
@@ -47,13 +47,7 @@
 		     /*.textHtml>div.muiaudio{background: #CCCCCC;}*/
 		     audio,.audioa{position: fixed;top:100px;left:0;z-index: 1000;;}
 		     .audioa{top:200px}
-		     #socketContent .right .muiaudio{text-align: right !important;}
-		     #socketContent .left .muiaudio{text-align: left !important;}
-		     .audioTime{position: absolute;top:0;width:30px;}
-		     #socketContent .right .audioTime{left:-36px;text-align:right;}
-		     #socketContent .left .audioTime{;right:-36px;text-align:left;}
 		</style>
-
 		<style type="text/css">
 			   .loop-mymove{
 						animation:mymove 0.72s infinite linear ;
@@ -105,7 +99,7 @@
         		<!--</from>-->
         		<button class="mui-icon mui-icon-mic" id="clickaudio"></button>
         		<!--mui-btn-blue-->
-        		<button class="" id="sendaudio" style="display: none;">按住 说话</button>
+        		<button class="" id="sendaudio" style="display: none;">send</button>
         		<!--<div contenteditable="true">sdfasdfsdafsdafsadfs</div>-->
 				<textarea name="" id="chatmsg"></textarea>
 			    <button class="" id="send">send</button>			
@@ -127,7 +121,6 @@
 		<script src="../../contronller/config.js"></script>
 		<script src="../../contronller/common.js"></script>
 		<script src="../../js/mui.md5.js"></script>
-		<script src="../../contronller/audioAmrBase64.js"></script>
 		<script src="../../contronller/createView.js"></script>
 		<script type="text/javascript">
 			var rid = null,
@@ -193,17 +186,98 @@
                 })
 			})
 		</script>
+	<script type="text/javascript">
+// 扩展API加载完毕后调用onPlusReady回调函数 
+document.addEventListener( "plusready", onPlusReady, false );
+// 扩展API加载完毕，现在可以正常调用扩展API 
+function onPlusReady() { 
+	
+}
+
+// 开始录音
+var r=null;
+var data_audio_src = null;
+function startRecord(){
+	console.log('开始录音：');
+	r = plus.audio.getRecorder();
+	if ( r == null ) {
+		console.log('录音对象未获取');
+		return;
+	}
+	r.record({filename:'_doc/audio/'}, function(p){
+		console.log('录音完成：'+p);
+		plus.io.resolveLocalFileSystemURL(p, function(entry){
+//			   getaudioTime(p);
+//			   return false;
+			   createUpload(p,uid,rid);//mui 上传文件
+//			   console.log(document.getElementById('audioFlie'))
+//				document.from.audio.value="C:\\abc.txt"; 				
+//			    document.getElementById("formDate").getElementsByTagName('input')[0].setAttribute('value', entry.toLocalURL());
+			    
+//			    data_audio_src = entry.toLocalURL();
+
+
+//				console.log(.getDuration());
+//			    muiaddaudioajax(entry.toLocalURL());
+			    
+//			    playaudio(p);
+//			    console.log('playaudio---------')
+//			    socEl(1,null,null,null,'<div class="audio" data-audio-src="'+entry.toLocalURL()+'"></div>');
+//			    playaudio('http://www.runoob.com/try/demo_source/horse.ogg');
+//		         var createItem = document.getElementById('createItem');
+//		         var li = document.createElement('li');
+//		         li.setAttribute('data-audio',p);
+//		         li.style='padding:15px;';
+//		         li.innerHTML = p;
+//		         li.addEventListener('click',function(){
+//		   	   	  	   console.log('click');
+//		   	   	  	   var _audio = this.getAttribute('data-audio');
+//		   	   	  	   playaudio(_audio);
+//		         })
+//		         createItem.appendChild(li);
+		}, function(e){
+			console.log('读取录音文件错误：'+e.message);
+		});
+	}, function(e){
+		console.log('录音失败：'+JSON.stringify(e));
+	} );
+}
+// 停止录音
+function stopRecord(){
+	console.log(r);
+	if(r)
+	r.stop()
+	r = null;
+}
+
+//点击播放录音
+var createPlayer = null;
+function playaudio(path,cb){
+	console.log(path);
+	createPlayer = plus.audio.createPlayer( path );
+	createPlayer.play(function(){
+		  console.log('success')
+		  if(cb){cb()}
+	},function(e){
+		 console.log('err---'+e.message)
+		 if(cb){cb()}
+	})
+}
+//停住播放录音
+function stopaudio(cb){
+	   if(createPlayer){
+		   createPlayer.stop();
+		   createPlayer=null;
+	   }
+	   if(cb){cb()};
+}
+	</script>
 		<script src="../../socket.io/socket.io.js"></script>
 		<!--<script src="https://lib.baomitu.com/socket.io/2.1.1/socket.io.js"></script>-->
 		<script type="text/javascript">
-//		 mui.plusReady(function() {
-//		 	muiAudioAmrBase64.AmrBase64ToAudioPlay("data:audio/amr;base64,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")
-//       })
-//       mui.plusReady(function() {
+			// mui.plusReady(function() {
 				    // document.getElementById('flex-container').style.top = view.headerHeight + 'px';
-				    
 					//查询最近十条消息
-				    var isGetChatRecordLoadend = false;//是否已经加载完成了
 				    function getChatRecord(rid,uid,page,pageSize){				    	
 					    mui.ajax({
 						    	url:config.host+'/app/search/ChatRecord',
@@ -215,36 +289,20 @@
 						    		pageSize:pageSize
 						    	},
 						    	success:function(data){
-						    		
 //						    		alert(JSON.stringify(data));
 						    		var result = JSON.parse(data).result;
 						    		for(var i= 0;i<result.length ;i++){
-//							    			 var msg = JSON.parse(result[i].msg);
+							    			 
+							    			 var msg = JSON.parse(result[i].msg);
 							    			 var type = 2;
-							    			 if(uid==result[i]['fromUid']){
+							    			 if(uid==msg['from']['id']){
 							    			 	 type = 1;
 							    			 }
-							    			 socEl(type,null,result[i],null,result[i].msg,null,true)						    			 
-						    		}
-//						    		alert(result.length<pageSize);
-						    		if(result.length<pageSize){
-						    			isGetChatRecordLoadend = true;
+							    			 socEl(type,null,msg,null,msg.msg,null,true)						    			 
 						    		}
 					    			 //防止多次加载
 					    			 if(!getChatRecordIsLoading){
-					    			 	    getChatRecordIsLoading=true;
-					    			 }
-					    			 if(isGetChatRecordLoadend){
-								    	    var el = document.createElement('div');
-								    	    el.style = 'text-align: center;padding: 5px;color:#666;font-size:12px;';								    	    
-							    	  	    var sectionEl = socDom('socketContent').getElementsByTagName('section')[0];
-							    	  	    if(!sectionEl){
-							    	  	    	  el.innerHTML = '暂无聊天记录';
-							    	  	    	  socDom('socketContent').appendChild(el);
-							    	  	    }else{
-							    	  	    	el.innerHTML = '聊天记录已全部加载完成';
-							    	  	    	socDom('socketContent').insertBefore(el,sectionEl);
-							    	  	    }
+					    			 	  getChatRecordIsLoading=true;
 					    			 }
 					    			 //移除消息加载动画
 //					    			 alert(removeMsgLoading);
@@ -284,25 +342,13 @@
 				    //type 1 自己 right 2=>left 别人  3=》说明
 				    var socEl = function(type,chat_id,data,uname,html,cb,insertBefore){
 				    	  var el = document.createElement('section');
-//				    	  var sectionId = 'section_'+new Date().getTime();
-//				    	  el.id = sectionId;
-//				    	  console.log(html);
-				    	  html = html?html.replace(/\\"/g,'"'):'';
+//				    	  alert(html);
+				    	  html = html.replace(/\\"/g,'"');
 				    	  html = common.restoreEmoji(html);
-				    	  var isAudio = false;
-				    	  if(common.audioBase64(html,true)){
-				    	  	  //如果是音频
-//				    	  	  console.log('音频-----------------')
-				    	  	  isAudio = true;
-				    	  }else{
-				    	  	   //不是音频
-				    	  	   html = '<div style="padding:5px 10px;">'+html+'</div>';
-				    	  }
-				    	  html = common.audioBase64(html);
 				    	  
-				    	  var imageUrl = data&&data['user_img']?config.host+data['user_img']:'';
-				    	  var username = data&&data['username']?'<div class="mui-ellipsis">'+data['username']+'</div>':'';
-
+				    	  var imageUrl = data&&data['from']?'http://114.115.137.212'+data['from']['user_img']:'';
+				    	  var username = data&&data['from']?'<div class="mui-ellipsis">'+data['from']['username']+'</div>':'';
+				    	  console.log(data);
 				    	  switch(type){
 				    	  	  case 1:		    	  	     
 				    	  	     el.innerHTML = '<div class="noLoopIcon right mui-clearfix mui-text-right" id="'+chat_id+'"><img src="'+imageUrl+'" class="userimg"><div class="content">'+username+'<div class="text mui-text-left textHtml">'+html+'<i class="mui-icon mui-icon-spinner mui-spin loop-mymove"></i></div></div></div>';
@@ -331,36 +377,11 @@
 				    	  	   contentImg[i].setAttribute('data-preview-src','');
 				    	  	   contentImg[i].setAttribute('data-preview-group','1');
 				    	  }
-				    	  //如果是语音-缓存语音			    	  
-				    	  if(isAudio){
-//				    	  	  console.log(el);
-				    	  	  var elall = el.getElementsByTagName('*');
-				    	  	  for(var i=0;i<elall.length;i++){
-				    	  	  	   var audioName = elall[i].getAttribute('data-audio-name');
-				    	  	  	   var audiobase64 = elall[i].getAttribute('data-audio-base64');
-//				    	  	  	   console.log(audiobase64)
-				    	  	  	   if(audioName&&audiobase64){
-				    	  	  	   	   isLoadAmrBase64ToAudio(audioName,audiobase64);
-				    	  	  	   }
-				    	  	  }				    	  	  
-				    	  	  function isLoadAmrBase64ToAudio(audioName,audiobase64){                                        
-                                        plus.io.resolveLocalFileSystemURL('_doc/audio/amr/'+audioName+'.amr',function(){
-//                                      	    console.log('音频---------已存在')
-                                        },function(){
-//                                      	console.log('音频---------未存在')
-//                                      	console.log('audiobase64-----'+audiobase64);
-                                        	if(audiobase64){                                        		 
-                                        		  muiAudioAmrBase64.cacheAmrBase64ToAudio(audiobase64,audioName);
-                                        	}
-                                        })
-				    	  	    }
-				    	  }		
 				    	  if(cb){cb()}
-				    	  scrollBottom();	 
 				    	  
 				    }
 				     // var localhost = 'http://127.0.0.1:3000/room';
-				    var localhost = config.host+':3000/room';    
+				    var localhost = 'http://114.115.137.212:3000/room';    
 				    rid = common.getUrlParam('room');
 				    uid = common.getUrlParam('uid');
 				    
@@ -370,7 +391,7 @@
 					    	data:{
 					    		uid:uid
 					    	},
-					    	success:function(data){		
+					    	success:function(data){				    		
 					    		data = JSON.parse(data);
 					    		if(data.code==200){
 					    			document.getElementById('title').innerHTML = data.result.username;
@@ -395,23 +416,17 @@
 				    var getChatRecordPage = 1;
 				    var getChatRecordPageSize = 10;
 				    var getChatRecordIsLoading = true;//阻止多次加载
-				    
 				    getChatRecord(rid,uid,getChatRecordPage,getChatRecordPageSize);
 				    socDom('socketContent').addEventListener('scroll',function(e){
-				    	if(isGetChatRecordLoadend){
-				    		  return false;
-				    	}
 //				    	console.log(e.srcElement.scrollTop);
-                        if(e.srcElement.scrollTop<200&&getChatRecordIsLoading){
-//                      	 console.log('isscrollloading-------200')
-//                      	 console.log('isGetChatRecordLoadend ============'+isGetChatRecordLoadend);
+                        if(e.srcElement.scrollTop<100&&getChatRecordIsLoading){
                         	 getChatRecordIsLoading = false;
                         	 getChatRecordPage++;
                         	 addMsgLoading();
                         	 getChatRecord(rid,uid,getChatRecordPage,getChatRecordPageSize);
                         }
 				    })
-				    //消息加载动画  
+				    //消息加载动画
 				    function addMsgLoading(){
 				    	    var el = document.createElement('div');
 				    	    el.id = 'msgLoading';
@@ -442,12 +457,14 @@
 		//		         socEl(data)
 		                 socEl(3,null,null,null,data)
 				    });
+		
 				    room.on('room msg', function (data) {
 			    	    	var type = 1;
-			    	    	if(data['fromUid'] != uid){
+			    	    	if(data['from']['id'] != uid){
 			    	    		type = 2;
 			    	    	}
-			                socEl(type,chat_id,data,data['username'],data['msg']);
+			    	    	
+			                socEl(type,chat_id,data,data['from']['username'],data['msg']);
 			                scrollBottom();
 //			                alert(JSON.stringify(data))
 							mui.plusReady(function() {
@@ -459,55 +476,31 @@
 				    });
 				    // 未读消息
 				    room.on('room unread',function(data){
-//				    	     console.log('room unread-------'+JSON.stringify(data));
+				    	    // console.log('room unread-------'+JSON.stringify(data));
+				    	     console.log(data);
 				    	    for(var i=0;i<data.length;i++){
 				    	    	var type = 1;
-				    	    	if(data['fromUid'] != uid){
+				    	    	// console.log(data[i]);
+				    	    	// console.log("data[i]['from']['id']---"+data[i]['from']['id']);
+				    	    	// console.log('uid---'+uid);
+				    	    	var _data = JSON.parse(data[i]);
+				    	    	console.log(_data);
+				    	    	if(_data['from']['id'] != uid){
 				    	    		type = 2;
 				    	    	}
-		                        socEl(type,new Date().getTime(),data[i],data[i]['username'],data[i]['msg']);
+		                        socEl(type,new Date().getTime(),_data,_data['from']['username'],_data['msg']);
 				    	    }
 				    	    scrollBottom();		    	    
 				    })
 				    socDom('send').addEventListener('click',function(){
 				    	    var sendMsg = socDom('chatmsg').value;
-				    	    var msgReg = /^\s+$/g;
 		//		    	    console.log(sendMsg);
-				    	    if(sendMsg==''||msgReg.test(sendMsg)){
-				    	    	console.log('不能发空格');
-				    	    	socDom('chatmsg').focus();
+				    	    if(sendMsg==''){
 				    	    	return false;
 				    	    }
 				    	    socDom('chatmsg').value = '';
 				    	    sendMsg = common.replaceEmoji(sendMsg);
 				    	    emitSendMsg({sendMsg:sendMsg});
-				    })
-				    socDom('chatmsg').addEventListener('focus',function(){		    	  
-		                    scrollBottom();		   
-				    })
-				    var oldValue = '';
-				    socDom('chatmsg').addEventListener('keyup',function(){
-                          //搜狗输入法表情图片
-                          var emojiReg = /http:\/\/pinyin.cn\/e\d+/g;
-                          var msgReg = /^\s+$/g;
-                          var value = this.value;
-				    	  if(value!=''&&!msgReg.test(value)){
-				    	    	console.log('mui-btn-blue')
-				    	  	  socDom('send').className = 'mui-btn-blue';
-				    	  }else{
-				    	  		console.log('mui-no-blue')
-				    	  	  socDom('send').className = '';
-				    	  } 
-				    	  var matchEmojiReg = this.value.match(emojiReg);
-				    	  if(matchEmojiReg){
-				    	  	  this.value = oldValue;
-				        	  common.sougouEmojiImg(String(matchEmojiReg),function(img){
-//				        	       alert(img);
-				        	       emitSendMsg({sendMsg:img,type:'img'});
-				              })
-				    	  }else{
-				    	  	  oldValue = this.value;
-				    	  }		
 				    })
 				    socDom('chatmsg').addEventListener('keydown',function(){
 				    	  if(this.scrollHeight>35&&this.scrollHeight<90)
@@ -515,6 +508,7 @@
 				    })
 				    socDom('clickaudio').addEventListener('click',function(){
 				    	  var isChack = this.getAttribute('isChack');
+				    	  console.log(isChack);
 				    	  if(isChack){
 				    	  	    this.removeAttribute('isChack');
 				    	  	    socDom('sendaudio').style.display = 'none';
@@ -525,112 +519,29 @@
 				    	  	    socDom('chatmsg').style.display = 'none';
 				    	  }
 				    })
-				    
-				    
 				    var stopRecordTimeout = null;
-				    var audioBase64 = null;
-				    var audiopath = null;
-				    var isStartaudio = true;
-				    var audioTime = false;//录音超过一秒才可以
-				    var audioTimeout = null;
-				    var audioReadingTime = null;
-				    var startReadingAudioIndex = 0;//说话时点点点动画
-				    var startReadingAudioTimeout = null;//说话时点点点动画
 				    socDom('sendaudio').addEventListener('touchstart',function(){
-				    	console.log('--------------------event.detail.num---------------------')
-				          var _this = this;
-				    	  audioReadingTime = new Date().getTime();
-				    	  audioTimeout = setTimeout(function(){
-				    	  	  audioTime = true;
-				    	  	  clearTimeout(audioTimeout);
-				    	  },1000)
-				    	  if(!isStartaudio){
-				    	  	  console.log('录音频率过高')
-				    	  	  return false;
-				    	  }
-				    	  isStartaudio = false;
-				    	  var isStartaudioTimeout = setTimeout(function(){
-				    	  	  isStartaudio = true;
-				    	  	  clearTimeout(isStartaudioTimeout);
-				    	  },3000)
-				    	  audiopath = null;
-				    	  lastmuiaudiocStopaudio();//停止播放
 				    	  //录音频
-				    	  muiAudioAmrBase64.startRecord(function(path){
-				    	  	   audiopath = path;
-				    	  	   isStartaudio = true;
-				    	  	   clearTimeout(isStartaudioTimeout);
-				    	  },function(err){
-				    	  	   if(err.code==3||err.message=="start failed."){
-					    	  	   	   plus.device.vibrate();
-					    	  	   	   mui.toast('录音失败；请检查是否开启录音权限');
-							    	   clearInterval(startReadingAudioTimeout);
-							    	   socDom('sendaudio').innerHTML = '按住    说话';
-							    	  //发送音频
-			//				    	  muiajax();
-							    	  if(!_this.className)
-							    	  return false;
-							    	  else
-							    	  _this.className = _this.className.replace('mui-btn-blue','');
-				    	  	   }
-				    	  });
+				    	  startRecord();
 				    	  stopRecordTimeout = setTimeout(function(){
-				    	  	   muiAudioAmrBase64.stopRecord();
+				    	  	   stopRecord();
 				    	  	   mui.toast('不能超过一分钟');
 				    	  	   clearTimeout(stopRecordTimeout);
-				    	  },59000)
+				    	  },60000)
 				    	  this.className = this.className&&this.className.indexOf('mui-btn-blue')>-1?this.className:this.className+' mui-btn-blue';
-				    	 
-				    	  startReadingAudioTimeout = setInterval(function(){
-				    	  	      if(startReadingAudioIndex>=3){
-				    	  	      	  startReadingAudioIndex=0;
-				    	  	      }
-				    	  	      startReadingAudioIndex++;
-					    	  	  switch(startReadingAudioIndex){
-					    	  	  	  case 1:
-					    	  	  	    socDom('sendaudio').innerHTML = '正在说话.';
-					    	  	  	  break;
-					    	  	  	  case 2:
-					    	  	  	    socDom('sendaudio').innerHTML = '正在说话..';
-					    	  	  	  break;
-					    	  	  	  case 3:
-					    	  	  	    socDom('sendaudio').innerHTML = '正在说话...';
-					    	  	  	  break;
-					    	  	  }
-				    	  },500)				    	  
 				    })
 				    socDom('sendaudio').addEventListener('touchend',function(){
-				    	  //停住录音
-				    	   muiAudioAmrBase64.stopRecord();
-				    	   clearTimeout(stopRecordTimeout);
-				    	   var audiopathIntervalIndex = 1;
-				    	   clearInterval(audiopathInterval);
-				    	   var audiopathInterval = setInterval(function(){				    	   	
-				    	   	   if(audiopathIntervalIndex>300){
-				    	   	   	    clearInterval(audiopathInterval);
-				    	   	   	    mui.toast('获取录音失败');
-				    	   	   }
-				    	   	   if(audiopath){
-				    	   	   	      clearInterval(audiopathInterval);
-							    	  muiAudioAmrBase64.AudioAmrToBase64(audiopath,function(e,base64){
-								    	    if(!audioTime){
-								    	    	 clearTimeout(audioTimeout);
-								    	    	 audioTimeout = null;
-								    	    	 audioTime = false;
-								    	    	 mui.toast('录音时长太短');
-								    	    	 return false;
-								    	    }
-								    	    var audiopath = ((new Date()).valueOf()+'_'+Math.random().toString().substr(2));
-								    	    var chatTime = Math.ceil(new Date().getTime()/1000)-Math.ceil(audioReadingTime/1000);//语音聊天时长
-								    	    var chatTimeWidth = ((Math.ceil(chatTime/10)/6)*70+30)/100*(window.screen.width-150);
-//								    	    console.log('audioReadingTime----------------'+Math.ceil((new Date().getTime()-audioReadingTime)/1000));
-								    	    var audiohtml = '<audioBase64 class="muiaudio" data-is-readed="false" data-audio-name="'+audiopath+'" data-is-reading="false" data-audio-base64="'+base64+'" style="width:'+chatTimeWidth+'px;padding:5px 10px;position:relative;"><div class="audioTime">'+chatTime+'"</div><span class="mui-icon mui-icon-loop"></span></audioBase64>';
-								    	    emitSendMsg({sendMsg:audiohtml,type:'audio'});
-							    	  });
-				    	   	   }
-				    	   },100)
-				    	   clearInterval(startReadingAudioTimeout);
-				    	   socDom('sendaudio').innerHTML = '按住    说话';
+				    	  //停住录音    	  
+				    	  stopRecord();
+				    	  clearTimeout(stopRecordTimeout);
+//				    	  var data_audio_src = document.getElementById('audio').getAttribute('value');
+				    	  setTimeout(function(){
+				    	  	
+//				    	  	  socEl(1,null,null,null,'<div class="muiaudio mui-text-right" style="width:100px;"><span class="mui-icon mui-icon-loop"></span></div>');
+//				    	  	  socEl(1,null,null,null,'<div class="muiaudio mui-text-right" data-audio-src="'+data_audio_src+'" style="width:100px;"><span class="mui-icon mui-icon-loop"></span></div>');
+				    	      //上传音频/语音
+//				    	      muiaudioajax();
+				    	  },500)
 				    	  //发送音频
 //				    	  muiajax();
 				    	  if(!this.className)
@@ -640,68 +551,30 @@
 				    })
 				    
 				    //
-				    var stopspan = null;
-				    var lastMuiAudioThis = null;//记录上一个播放对象
-				    var isReadTrue = true;
-
-				    function lastmuiaudiocStopaudio(){
-				    	 stopspan = null;
-				    	 if(lastMuiAudioThis){
+				    var lastmuiaudio = false;
+				    mui('body').on('tap','.muiaudio',function(){
+				    	 if(!this.getAttribute('data-audio-src')){
+				    	 	 return false;
+				    	 }
+				    	 var stopspan = null;
+				    	 if(lastmuiaudio){
 				    	 	    //停住播放
 					    	 	console.log('停住播放');
 					    	 	stopspan = function(){
-					    	 		lastMuiAudioThis.setAttribute('data-is-reading','false');
-					    	 		var _span = lastMuiAudioThis.getElementsByTagName('span')[0];
-					    	 		if(!_span.className)
-							    	return false;
-							    	else
+					    	 		var _span = lastmuiaudio.getElementsByTagName('span')[0];
 					    	 		_span.className = _span.className.replace(' loop-mymove','');
 					    	 	}
 				    	 }
-				    	 muiAudioAmrBase64.stopaudio(stopspan);
-				    }
-				    mui('body').on('tap','.muiaudio',function(){
-				    	var _this = this;
-				    	if(!isReadTrue){
-				    	 	  console.log('等待播放中...');
-				    	 	  return false;
-				    	 }
-				    	 
-				    	 if(!this.getAttribute('data-audio-base64')){
-				    	 	 return false;
-				    	 }
-				    	 //如果按的是当前的就不在播放
-				    	 if(this.getAttribute('data-is-reading')=='true'){
-					    	 lastmuiaudiocStopaudio();//真正开始播放才可以停止播放MuiaudioTimeout
-					    	 return false;
-				    	 }
-				    	 lastmuiaudiocStopaudio();//真正开始播放才可以停止播放MuiaudioTimeout
-				    	 this.setAttribute('data-is-reading','true');
-//				    	 lastmuiaudiocStopaudio();//真正开始播放才可以停止播放MuiaudioTimeout
+				    	 stopaudio(stopspan);
 			    	 	 //开始播放
 			    	 	 console.log('开始播放');
-			    	 	 isReadTrue = false;
+				    	 var data_audio_path = config.host+'/'+this.getAttribute('data-audio-src');
 				    	 var _playspan = this.getElementsByTagName('span')[0];
 				    	 _playspan.className = _playspan.className+' loop-mymove';
-				    	 var data_audio_base64 =this.getAttribute('data-audio-base64');
-				    	 var audioName = this.getAttribute('data-audio-name');
-					     muiAudioAmrBase64.AmrBase64ToAudioPlay(data_audio_base64,audioName,function(){
-				    	  	   //真正开始播放
-				    	  	   console.log('真正开始播放---------')
-				    	  	   isReadTrue = true;
-				    	  },function(){
-				    	 	  //播放成功
-				    	 	  plus.device.beep();
-				    	 	  console.log('播放成功---------')
-				    	 	  isReadTrue = true;
-				    	 	  _this.setAttribute('data-is-reading','false');
-			    	 		 if(!_playspan.className)
-					    	 return false;
-					    	 else
+				    	 playaudio(data_audio_path,function(){
 				    	 	  _playspan.className = _playspan.className.replace(' loop-mymove','');
 				    	 });
-//					    })	
-				    	 lastMuiAudioThis = this;
+				    	 lastmuiaudio = this;
 				    })
 				    
 				    //触发发送消息
@@ -717,14 +590,140 @@
 				    	    	  	   		socDom(data.chat_id).className = noLoopIcon+' noLoopIcon';
 				    	    	  	   		clearTimeout(noLoopIconTimeout);
 				    	    	  	   	},600)
-				    	    	  }		    	    	 
+				    	    	  }
+		    	    	 
 				    	    });
 				    }
 
+				    socDom('chatmsg').addEventListener('focus',function(){		    	  
+		                    scrollBottom();		   
+				    })
+				    var oldValue = '';
+				    socDom('chatmsg').addEventListener('keyup',function(){		    	  
+		//		    	  console.log(this.value!='');
+                          
+                          //搜狗输入法表情图片
+                          var emojiReg = /http:\/\/pinyin.cn\/e\d+/g;
+				    	  if(this.value!=''){
+				    	  	  socDom('send').className = 'mui-btn-blue';
+				    	  }else{
+				    	  	  socDom('send').className = '';
+				    	  } 
+				    	  var matchEmojiReg = this.value.match(emojiReg);
+				    	  console.log(matchEmojiReg);
+				    	  if(matchEmojiReg){
+				    	  	  this.value = oldValue;
+				        	  common.sougouEmojiImg(String(matchEmojiReg),function(img){
+//				        	       alert(img);
+				        	       emitSendMsg({sendMsg:img,type:'img'});
+				              })
+				    	  }else{
+				    	  	  oldValue = this.value;
+				    	  }		
+				    })
+				    //音频
+//				    muiaudioajax()
+			        function muiaudioajax(){
+				            	  var form = document.getElementById("formDate");
+				            	  var _uri = 'http://127.0.0.1/app/ajax/addaudio?rid='+rid+'&uid='+uid ;
+				                  var fd = new FormData(form);
+				                  console.log(_uri);
+//				                  console.log(form.getElementsByTagName('input')[0].value);
+				                  return false;
+								  mui.ajax({
+								    	url:_uri,
+								    	type:'post',
+								    	data:fd,
+								    	processData: false,  // 告诉jQuery不要去处理发送的数据
+	                                    contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+								    	success:function(data){
+								    		console.log(data);
+								    	},
+								    	error:function(err){
+								    		// addRoomChatItemsLocalStorageNum(rid,num);
+								    		console.log(err);
+								    		mui.toast('连接服务器失败')
+								    	}
+							      })
+			        }
+//			        muiaddaudioajax('path');
+			        function muiaddaudioajax(path){
+//				            	  var form = document.getElementById("formDate");
+				            	  var _uri = config.host+'/app/ajax/fsaddaudio?rid=20&uid=1&path='+path ;
+//				            	  var _uri = 'http://127.0.0.1/app/ajax/fsaddaudio?rid=20&uid=1&path='+path ;				            	  
+//				                  var fd = new FormData(form);
+				                  console.log(path);
+				                  console.log(_uri);
+				                  console.log('---------------')
+								  mui.ajax({
+								    	url:_uri,
+								    	type:'post',
+								    	data:{},
+								    	processData: false,  // 告诉jQuery不要去处理发送的数据
+	                                    contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+								    	success:function(data){
+								    		console.log('success0000000000000muiaddaudioajax')
+								    		console.log(data);
+								    	},
+								    	error:function(err){
+								    		console.log('error0000000000000muiaddaudioajax')
+								    		// addRoomChatItemsLocalStorageNum(rid,num);
+								    		console.log(err);
+								    		mui.toast('连接服务器失败')
+								    	}
+							      })
+			        }
+			        
+					// 创建上传任务
+					
+					function createUpload(path,rid,uid) {
+						var uri = config.host+'/app/ajax/addaudio?rid='+rid+'&uid='+uid;//"http://www.test.com/upload.do"
+						var task = plus.uploader.createUpload( uri , 
+							{ method:"POST",blocksize:0, priority:100 },
+							function ( t, status ) {
+								console.log();
+								// 上传完成
+								if ( status == 200 ) { 
+//									alert( "Upload success: " + JSON.stringify(t) );
+									console.log(JSON.parse(t.responseText).data.src);
+									
+									emitaudio(JSON.parse(t.responseText).data.src);
+								} else {
+//									alert( "Upload failed: " + status );
+								}
+//								console.log(JSON.parse(t.responseText).data.src)
+							}
+						);
+						task.addFile( path, {key:"audio"} );
+//						task.addData( "string_key", "string_value" );
+						//task.addEventListener( "statechanged", onStateChanged, false );
+						task.start();
+					}
+					//触发socket audio
+                    function emitaudio(path){
+				    	    var audiohtml = '<div class="muiaudio mui-text-right" data-audio-src="'+path+'" style="width:100px;"><span class="mui-icon mui-icon-loop"></span></div>';
+				    	    emitSendMsg({sendMsg:audiohtml,type:'audio'});
+				    	    
+                    }
+                    
+                    function getaudioTime(src){
+//                  	    alert(src);
+		                    var _audio = document.createElement('audio');
+		                    _audio.style='position:fixed;top:0;left:0;z-index:100000'
+		                    _audio.setAttribute("src", src);
+		                    document.getElementsByTagName('body')[0].appendChild(_audio);
+		                    setTimeout(function(){
+		                    	console.log(_audio);
+		                    	console.log(parseFloat(_audio['duration']));
+		                    },100)
+                    }
 
-
-//			  })
-         </script>
+                    
+//                  _audio.id = 'a_audio';
+			 // })
+			 //C:\/fakepath\/friendship.mp3
+//			 socEl(1,null,null,null,'<div class="muiaudio mui-text-right" data-audio-src="http://www.runoob.com/try/demo_source/horse.ogg" style="width:100px;"><span class="mui-icon mui-icon-loop loop-mymove"></span></div>');
+		</script>
 
 	</body>
 

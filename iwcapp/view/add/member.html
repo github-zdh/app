@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的/个人中心</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.title {
+				padding: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+				background-color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<button id="logout" style="margin:100px;">退出登录</button>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../contronller/createView.js"></script>
+		<script>
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: false //关闭back按键监听
+				}
+			});
+			mui.plusReady(function() {
+				document.getElementById("logout").addEventListener('click',function(){
+				     mui.ajax({
+					    	url:'http://114.115.137.212/app/login/logout',
+					    	type:'post',
+					    	success:function(data){
+					    		mui.toast(data.msg);
+					    		if(data.code==200){
+									 localStorage.removeItem('userInfo');
+									 setTimeout(function(){
+										 view.openWindow({view:'../login/login.html',wid:'../login/login.html'});
+									 },1500)
+					    		}
+					    	},
+					    	error:function(err){
+					    		console.log(err);
+					    		mui.toast('连接服务器失败')
+					    	}
+				     })
+	//				 localStorage.removeItem('userInfo');
+	//				 view.openWindow({view:'../login/login.html',wid:'../login/login.html'});
+				})
+			})
+			
+		</script>
+	</body>
+
+</html>

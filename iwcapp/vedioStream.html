@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Audio Example</title>
+	<script type="text/javascript">
+// 扩展API加载完毕后调用onPlusReady回调函数 
+document.addEventListener( "plusready", onPlusReady, false );
+// 扩展API加载完毕，现在可以正常调用扩展API 
+function onPlusReady() { 
+}
+// 开始录音
+var r=null;
+function startRecord(){
+	console.log('开始录音：');
+	r = plus.audio.getRecorder();
+	if ( r == null ) {
+		console.log('录音对象未获取');
+		return;
+	}
+	r.record({filename:'_doc/audio/'}, function(p){
+		console.log('录音完成：'+p);
+		plus.io.resolveLocalFileSystemURL(p, function(entry){
+         var createItem = document.getElementById('createItem');
+         var li = document.createElement('li');
+         li.setAttribute('data-audio',p);
+         li.style='padding:15px;';
+         li.innerHTML = p;
+         li.addEventListener('click',function(){
+   	   	  	   var _audio = this.getAttribute('data-audio');
+   	   	  	   playaudio(_audio);
+         })
+         createItem.appendChild(li);
+		}, function(e){
+			console.log('读取录音文件错误：'+e.message);
+		});
+	}, function(e){
+		console.log('录音失败：'+JSON.stringify(e));
+	} );
+}
+// 停止录音
+function stopRecord(){
+	console.log(r);
+	if(r)
+	r.stop()
+	r = null;
+}
+
+//点击播放录音
+var createPlayer = null;
+function playaudio(path){
+	createPlayer = plus.audio.createPlayer( path );
+	createPlayer.play(function(){
+		  console.log('success')
+	},function(e){
+		 console.log('err---'+e.message)
+	})
+}
+//停住播放录音
+function stopaudio(){
+	   if(createPlayer)
+	   createPlayer.stop()
+	   createPlayer=null;
+}
+	</script>
+	</head>
+	<body style="font-size: 100px;">
+	  <div id="createItem"></div>
+		<input type="button" value="startRecord Play" onclick="startRecord();"/> 
+		<br/>
+		<input type="button" value="Stop stopRecord" onclick="stopRecord();"/>
+		<br/>
+		<input type="button" value="stopaudio" onclick="stopaudio();"/>
+	</body>
+
+</html>

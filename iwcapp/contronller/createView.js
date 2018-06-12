@@ -14,9 +14,12 @@ mui.plusReady(function(){
 	//	}
 		
 
-		view.openWindow = function(obj){		
+		view.openWindow = function(obj){	
 							if(!obj._this&&!obj.view){
-								var obj = {_this:obj}
+									if(!obj.getAttribute('data-view')){
+										 return false;
+									}
+									var obj = {_this:obj}
 							}
 							//123456123456123456123456
 							//rgba(0,0,0,0.7)
@@ -26,9 +29,13 @@ mui.plusReady(function(){
 							var top = obj.top?obj.top:(plus!=undefined?(plus.navigator.getStatusbarHeight()):20);
 					    var view = obj.view?obj.view:obj._this.getAttribute('data-view');				        
 					    var wid = obj.wid?obj.wid:obj._this.getAttribute('data-wid');
+					    var uri = obj._this&&obj._this.getAttribute('data-uri') ? obj._this.getAttribute('data-uri') : false;
 					    var wid = wid ? wid : view;
 					    var extras = obj.extras ? obj.extras : {};
 					    var delay = obj.delay ? obj.delay : 300;
+					    if(uri){
+					    	   extras.uri = encodeURIComponent(obj._this.getAttribute('data-uri'));
+					    }
 					    
 							if(obj.before&&obj.before.constructor.name==='Function'){
 								   before()

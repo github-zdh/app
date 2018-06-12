@@ -18,37 +18,18 @@ window.addEventListener('ManualRefresh',function(event){
 	    	  extras:{menu:'home'}
 	      }
     }
-    // 判断是否有这个窗口  @params id 窗口ID 这个方法必须在plusReady方法中执行
-    _this.hasView = function(id){
-    	  var _allview = plus.webview.all();
-    	  for(var i=0;i<_allview.length;i++){
-    	    	  if(_allview[i].id==id){
-    	    	  	  return true;
-    		      }
-          }
-          return false;
-    },
-    // 判断当前是否在创建页面中。。。
-    _this.isCeateView = false;
-    _this.hasCeateView = function(time){
-		    if(_this.isCeateView){
-		    	_this.isCeateView=false;
-		    	return false;
-		    }
-		    var time = time||1000;
-	    	var clickAout = setTimeout(function(){
-	    		 _this.isCeateView = false;
-	    		 clearTimeout(clickAout);
-	    	},time)
-		    _this.isCeateView=true;
-		    return true;
+    //获取URL参数
+    _this.getUrlParam = function(name){
+    	  var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+    	  var r = window.location.search.substr(1).match(reg);
+    	  if(r) return decodeURI(r[2]);return null;
     }
     
     ////把emoji码点改成emoji图片形式
     _this.restoreEmoji = function(str){
 		  //var str = '<div><emoji>128513</emoji>/<emoji>128513</emoji>/<emoji>128513</emoji></div>';
-		  var regstr = /<emoji>\d+<\/emoji>/g;
-		  var _regReg = /(<emoji>|<\/emoji>)/g;
+		  var regstr = /<emojiCode>\d+<\/emojiCode>/g;
+		  var _regReg = /(<emojiCode>|<\/emojiCode>)/g;
 		  if(!str){
 		  	  return str;
 		  }
@@ -57,7 +38,7 @@ window.addEventListener('ManualRefresh',function(event){
 		      
 		      for(var i=0;i<_reg.length;i++){
 		          _reg[i] = _reg[i].replace(_regReg,'');
-		          str = str.replace('<emoji>'+_reg[i]+'</emoji>',String.fromCodePoint(_reg[i]));
+		          str = str.replace('<emojiCode>'+_reg[i]+'</emojiCode>',String.fromCodePoint(_reg[i]));
 		      }
 		  }
 		  return str;
@@ -79,10 +60,10 @@ window.addEventListener('ManualRefresh',function(event){
 			      for(var i=0;i<emojiarr.length;i++){
 			           emojiarr[i] = emojiarr[i].codePointAt(0)
 			      }
-				  emojireg = emojireg.replace(new RegExp(ranges.join('|'), 'g'),'[emoji]');
-				  emojireg = emojireg.split('[emoji]');				  
+				  emojireg = emojireg.replace(new RegExp(ranges.join('|'), 'g'),'[emojiCode]');
+				  emojireg = emojireg.split('[emojiCode]');				  
 				  for(var i=0;i<emojireg.length;i++){
-				         newEmojireg += emojireg[i]+ (emojiarr[i]?'<emoji>'+emojiarr[i]+'</emoji>':'');
+				         newEmojireg += emojireg[i]+ (emojiarr[i]?'<emojiCode>'+emojiarr[i]+'</emojiCode>':'');
 				  }
 		    }
 		    return newEmojireg!=''?newEmojireg:emojireg;
@@ -107,6 +88,19 @@ window.addEventListener('ManualRefresh',function(event){
 		     	  }
 	      })
 	}
+	//语音  bool = true 传回 判断str的 bool 
+	_this.audioBase64 = function(str,bool){
+		    var regaudio = /^<audioBase64.+<\/audioBase64>$/g;
+		    if(bool){
+		    	return regaudio.test(str);
+		    }
+		    if(!regaudio.test(str)){
+		    	return str;
+		    }
+		    return str.replace('audioBase64','div');
+	}
+	
+//	
             //判断横屏竖屏
     _this.HorScreenOrVerScreen = function(hor,ver){
              	  if(window.innerWidth>window.innerHeight){

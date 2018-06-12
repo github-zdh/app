@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="MobileOptimized" content="320"/>
+		<title>Hello H5+</title>
+        <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/previewImage.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+
+		<style type="text/css">
+			  body{background: #f5f7f9;}
+			  .mui-bar-nav{
+			 	background: #333333;
+			 	box-shadow: none;
+			  }
+			  
+             /**/
+             ul,li{display: block;list-style-type: none;    padding: 0;}
+             header{background: #000000;height: 20px;}
+		</style>
+	</head>
+	<body>
+          <header></header>
+		
+	</body>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.md5.js"></script>
+		<script src="../../contronller/config.js"></script>
+		<script src="../../contronller/common.js"></script>
+		<script src="../../contronller/createView.js"></script>
+<script type="text/javascript">
+	var embed=null,cw=null,muiHistoryLength=0;
+	// H5 plus事件处理
+	function plusReady(){
+		var _url = decodeURIComponent(plus.webview.currentWebview().uri);
+		document.getElementsByTagName('header')[0].style.height = (parseInt(plus.navigator.getStatusbarHeight()||20))+'px';
+		embed=plus.webview.create(_url, 'embed', {top:(parseInt(plus.navigator.getStatusbarHeight()||20))+'px',bottom:'0px'});
+		cw = plus.webview.currentWebview();
+		cw.append(embed)
+		embed.addEventListener('loading',function(e,v){
+//			  console.log(e);
+			  muiHistoryLength++;
+		},false)
+//		console.log('----------------title');
+//		console.log(embed.titleText);console.log(embed.getTitle());
+	}
+	if(window.plus){
+		plusReady();
+	}else{
+		document.addEventListener('plusready', plusReady, false);
+	}
+</script>
+<script type="text/javascript">
+mui.back = function(){
+		if(muiHistoryLength>1){
+			muiHistoryLength -= 2;
+			embed.back();
+		}else if(cw){
+		    cw.close()	
+		}	
+}
+
+</script>
+</html>

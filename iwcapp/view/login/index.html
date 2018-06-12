@@ -23,7 +23,8 @@
 				<a class="mui-icon-contact mui-icon mui-pull-right"></a>
 			</header>
 		</div>
-        <div id="" style="position: fixed;top:50%;left: 5%;width: 90%;margin-top:-100px;border-radius: 5px;overflow: hidden;">
+		<!--<div id="getUser" style="position: fixed;bottom: 30px;right: 30px;color:#CCCCCC;z-index: 1001;">登陆账号密码在这里 > </div>-->
+        <div id="" style="position: fixed;top:50%;left: 5%;width: 90%;margin-top:-130px;border-radius: 5px;overflow: hidden;">
 			<form class="mui-input-group" style="padding-top:15px;padding-bottom: 15px;">
 			    <div class="mui-input-row">
 			        <label>邮箱</label>
@@ -37,7 +38,10 @@
 			        <button type="button" class="mui-btn mui-btn-primary" id="submit" style="width: 45%;margin-left:3%">确认</button>
 			        <button type="button" class="mui-btn mui-btn-danger" id="close" style="width: 45%;margin-left:3%">取消</button>
 			    </div>
+			    <div id="getUser" class="mui-pull-right" style="font-size: 10px;margin:10px 10px 0 0;">登陆账号密码在这里 > </div>
+			    <br style="clear: both;"/>
 			</form>
+			
         </div>
          
 		<script src="../../js/mui.min.js"></script>
@@ -189,6 +193,12 @@
 				            alert("无网络!"); 
 				            break;
 				        }
+                })
+                document.getElementById('getUser').addEventListener('click',function(){
+              	      view.openWindow({
+                  	      	view:'/view/login/user.html',
+                  	      	wid:'/view/login/user.html'
+              	      });
                 })
 			})
 		</script>

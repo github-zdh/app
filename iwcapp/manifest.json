@@ -73,7 +73,9 @@
 		"Contacts": {},
 		"Messaging": {},
 		"Proximity": {},
-		"Downloader": {},
+		"Downloader": {
+			"description": "文件下载，管理文件下载任务"
+		},
 		"Orientation": {},
 		"Geolocation": {},
 		"Accelerometer": {}
@@ -88,7 +90,7 @@
 		"splashscreen": {
 			"autoclose": true,/*如果为true，程序启动的图片可以自动关闭，如果为false，开发者需要手动关闭*/
 			"waiting": true,
-			"delay": "2000"
+			"delay": "1500"
 		},
 		"runmode": "normal",/*两个值，liberate或normal，前者在应用安装时释放资源，后者不需要释放资源*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
@@ -174,7 +176,7 @@
 				},
 				"android": {
 					"mdpi": "", /*必选，240x282，普通屏启动图片*/
-					"ldpi": "","hdpi":"C:/Users/huairen/Desktop/QQ截图20180604095237.png","xhdpi":"C:/Users/huairen/Desktop/13.png","xxhdpi":"C:/Users/huairen/Desktop/135.png"
+					"ldpi": "","hdpi":"images/manifest/5.png","xhdpi":"images/manifest/13.png","xxhdpi":"images/manifest/135.png"
 				}
 			}
 		},
@@ -203,14 +205,25 @@
 			},
 			"index.html": {
 				"resources": [
-					"view/home/index.html"
+					"view/home/index.html",
+					"/js/mui.md5.js",
+					"/contronller/createView.js",
+					"/contronller/vue.js",
+					"/contronller/config.js",
+					"/js/mui.min.js",
+					"/contronller/common.js",
+					"view/home/mail.html"
 				],
 				"refer": [
 					"view/home/member.html",
-					"view/home/mail.html",
 					"view/home/discover.html",
 					"view/login/index.html",
-					"view/home/tr.menu.html"
+					"view/home/tr.menu.html",
+					"boot.html",
+					"guide.html",
+					"vedioStream.html",
+					"view/appupdate/index.html",
+					"view/login/user.html"
 				],
 				"priority": 0
 			},
@@ -243,14 +256,18 @@
 				"refer": [
 					"view/member/userInfo.html",
 					"view/add/GroupChat.html",
-					"view/add/newfriends.html"
+					"view/add/newfriends.html",
+					"view/add/friends.html"
 				],
 				"priority": 0
 			},
 			"view/home/discover.html": {
 				"resources": [],
 				"refer": [
-					"view/blog/index.html"
+					"view/blog/index.html",
+					"view/dualpage/index.html",
+					"view/dualpage/fullscreen.html",
+					"view/demo/index.html"
 				],
 				"priority": 0
 			},
@@ -265,11 +282,47 @@
 			"view/member/set.html": {
 				"resources": [],
 				"refer": [
-					"view/login/index.html"
+					"view/login/index.html",
+					"view/appupdate/index.html"
 				],
 				"priority": 0
 			},
 			"view/member/userInfo.html": {
+				"resources": [],
+				"refer": [
+					"view/chat/chat.html"
+				],
+				"priority": 0
+			},
+			"guide.html": {
+				"resources": [],
+				"refer": [
+					"view/login/index.html"
+				],
+				"priority": 0
+			},
+			"view/chat/chat.html": {
+				"resources": [],
+				"refer": [
+					"view/chat/chat.html"
+				],
+				"priority": 0
+			},
+			"view/login/index.html": {
+				"resources": [],
+				"refer": [
+					"view/login/user.html"
+				],
+				"priority": 0
+			},
+			"view/login/user.html": {
+				"resources": [],
+				"refer": [
+					"view/dualpage/index.html"
+				],
+				"priority": 0
+			},
+			"view/add/GroupChat.html": {
 				"resources": [],
 				"refer": [
 					"view/chat/chat.html"

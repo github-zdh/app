@@ -39,6 +39,7 @@
 						backbutton: true //关闭back按键监听
 					}
 				});
+				console.log('scan----------')
 				mui.plusReady(function(){
 						var e = document.getElementById("scan");
 						if(e&&e.getAttribute('disabled')){
@@ -65,6 +66,9 @@
 						function onerror(){
 							 mui.alert('出错了')
 						}
+						for(var i in plus.barcode){
+							  console.log(i);
+						}
 						scan = new plus.barcode.Barcode('bcid',[],{
 							frameColor:'#666666',
 							scanbarColor:'#666666',
@@ -72,10 +76,9 @@
 						});
 						scan.onmarked = onmarked; 
 						scan.onerror = onerror;
-	                	scan.start();				    
+	                	scan.start();	
 				})
-	    </script>
-
+	   </script>
 	</body>
 
 </html>

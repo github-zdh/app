@@ -18,17 +18,21 @@
 		<script src="../../contronller/topRightMenu.js"></script>
 		<script src="../../contronller/createView.js"></script>
 		<script type="text/javascript">
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: true //关闭back按键监听
+				}
+			});
+			
 			mui.plusReady(function() {
 	            var list = [];
 	            var menu = plus.webview.currentWebview().menu;
 	            function closeMenu(){
-				   	    setTimeout(function(){
-				   	    	if(plus.webview.getWebviewById('./index.html')){
-				   	    		plus.webview.getWebviewById('./index.html').setStyle({mask:"none"})
-				   	    		plus.webview.currentWebview().hide();
-				   	    	}			   	    	 
-				   	    	 
-				   	    },100)
+				   	plus.webview.currentWebview().hide();
+	            }
+	            mui.back = function(){
+	            	plus.webview.currentWebview().hide();
 	            }
 	            //var _height = (50 * 3 + 30)+'px';//高*个数+box(padding)//侧滑页面高度（默认100%）
 	            // 如果增加/减少list - 》json 数据得去config配置文件修改topRightMenu
@@ -40,7 +44,7 @@
 									   img:'../../images/60x60.gif',//img/icon二选一
 									   click:function(){ 
 									   	    closeMenu();
-									   	    view.openWindow({view:'../add/friends.html',wid:'../add/friends.html',delay:200});
+									   	    view.openWindow({view:'../add/friends.html',wid:'../add/friends.html'});
 									   }
 								   },
 								   {

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <script src="../../contronller/init.js"></script>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/index.css">
+		<script src="../../js/mui.min.js"></script>
+	    <style type="text/css">
+	    	body{font-size:16px;}
+	    	button,input{padding:50px;}
+	    	/*body .upadeprogressbar{height: 50px;}*/
+	    	body .upadeprogressbar .mui-progressbar{height: 33px;width: 70%;border-radius: 50px;overflow: hidden;left: 3%;}
+	    	body .upadeprogressbar .mui-progressbar div#progressbarnum{    position: absolute;top: 0;left: 5%;z-index: 1;color: #FFFFFF;line-height: 33px;font-size: 30px;font-weight: 600;}
+	    </style>
+</head>
+<body>
+   <div style="height: 20px;background: #000000;"></div>
+   <div style="position: fixed;left: 0;bottom: 0;padding-bottom: 10px;width: 100%;">
+   	    <div style="padding: 3%;">下载新版本</div>
+		<div class="upadeprogressbar" style="position: relative; width: 100%;">
+			<div id="upadeprogressbar" class="mui-progressbar">
+				<span></span>
+				<div id="progressbarnum"></div>
+			</div>
+			<button class="mui-btn mui-btn-blue"  style="width: 20%;position: absolute;right: 2%;top:0;"  id="abortDownload">取消</button>
+		</div>
+		<div class="mui-text-center" style="margin-top:50px" >
+			
+			<!--<button class="mui-btn mui-btn-blue"  style="width: 23%;"  onclick="pauseDownload()">暂停</button>-->
+			<!--<button class="mui-btn mui-btn-blue"  style="width: 100%;"  onclick="abortDownload()">取消</button>-->
+			<!--<button class="mui-btn mui-btn-blue"  style="width: 23%;"   onclick="resumeDownload()">继续</button>-->
+			<!--<button class="mui-btn mui-btn-blue"  style="width: 49%;" onclick="createDownload()">下载</button>-->
+		</div>
+   </div>
+</body>
+<script type="text/javascript">
+	var dtask = null;
+	var appUpdateUrl = localStorage.getItem('appUpdateUrl');
+	var appUpdateType = localStorage.getItem('appUpdateType');
+	var progressbarnum = document.getElementById('progressbarnum');
+	var upadeprogressbar = mui("#upadeprogressbar");
+	mui.init({
+		swipeBack: false,
+		keyEventBind: {
+			backbutton: true //关闭back按键监听
+		}
+		
+	});
+
+mui.plusReady(function(){
+	mui.back = function(){
+		alert('back123');
+		if(appUpdateType==1){
+			  var all = plus.webview.all();
+			  for(var i=0;i<all.length;i++){
+			  	  all[i].close();
+			  }
+		}else{
+			plus.webview.currentWebview().close();
+		}
+	}
+	// 扩展API加载完毕后调用onPlusReady回调函数
+
+	// 监听下载任务状态 
+	function onStateChanged( download, status ) {
+		upadeprogressbar.progressbar().setProgress((download.downloadedSize / download.totalSize)*100);
+		progressbarnum.innerHTML = ((download.downloadedSize / download.totalSize)*100).toFixed(2) +'%';
+		if ( download.state == 4 && status == 200 ) {
+			// 下载完成 
+			console.log( "Download success: " + download.getFileName() );  
+			plus.runtime.install(download.getFileName());		
+		}  
+	}
+	// 创建下载任务
+	function createDownload() {
+//			plus.io.resolveLocalFileSystemURL('_downloads/H511E5BEA_0609171127.apk',function(entry){
+//				entry.remove(function(){
+//					 console.log('删除成功')
+//				});
+//			},function(err){
+//				 console.log('没有这个文件')
+//			})
+		plus.io.resolveLocalFileSystemURL('_downloads/H511E5BEA_0609171127.apk',function(entry){
+			 plus.runtime.install(entry.fullPath);
+		},function(err){
+			  mui.toast('正在下载APP');
+//			  mui("#upadeprogressbar")[0].style.display='block';
+			  dtask = plus.downloader.createDownload( "http://114.115.137.212/upload/app_update/H511E5BEA_0609171127.apk",{filename:'_downloads/'});
+			  dtask.addEventListener( "statechanged", onStateChanged, false );
+			  dtask.start(); 
+		})
+	}
+	// 暂停下载任务 
+	function pauseDownload() {
+		dtask.pause();
+	}
+	// 取消下载任务 
+	function abortDownload() {
+		if(!dtask){
+			mui.back();
+			return false;
+		}
+		dtask.abort();
+	}
+	document.getElementById('abortDownload').addEventListener('click',function(){
+		if(!dtask){
+			mui.back();
+			return false;
+		}
+		dtask.abort();
+	})
+	// 恢复下载任务
+	function resumeDownload() {
+		dtask.resume();
+	} 
+})
+</script>
+</html>
+
+

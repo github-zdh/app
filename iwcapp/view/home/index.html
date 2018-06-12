@@ -39,9 +39,9 @@
 	<body>
 		<div id="room" v-cloak>
                 <section class="homeList">
-                      <ul id="create" v-if="items.length!=0">
+                      <ul id="create" v-if="items&&items.length!=0">
                       	   <li v-for="(item,index) in items">
-                      	         <a data-wid="./chat.html" :data-view="'../chat/chat.html?room='+index+'&uid='+uid">
+                      	         <a data-wid="./chat.html" :data-view="'../chat/chat.html?room='+index+'&uid='+uid+'#/a=1'">
                                        <div class="userImg">
                                               <img v-bind:src="host+item.room_img" width="100%" height="100%" v-if="item.type&&item.type!=0">
                                               
@@ -55,18 +55,20 @@
                                              <h1 v-if="item.type&&item.type!=0">{{item.name}}</h1>
                                              <h1 v-else-if="item.rename&&item.rename!=''">{{item.rename}}</h1>
                                              <h1 v-else>{{item.username}}</h1>
-                                             <p v-if="item.msg&&item.msg.length!=0">{{item.msg[0].msg}}</p>
-                                             <p v-else-if="item.msgs">{{item.msgs|msg}}</p>
+                                             <p>{{item.msgs|msg}}</p>
                                        </div>
                                        <div class="time">
-                                             <div v-if="item.msg&&item.msg.length!=0">{{item.msg[0].addtime}}</div>
+                                             <!--<div v-if="item.msg&&item.msg.length!=0">{{item.msg}}</div>
                                              <div v-else-if="item.msgs">{{item.msgs|addtime}}</div>
-                                             <span class="mui-icon mui-icon-home" v-if="item.shield"></span>
+                                             <span class="mui-icon mui-icon-home" v-if="item.shield"></span>-->
                                        </div>
                       	         </a>
                       	   </li>
                      </ul>
-                     <div v-else style="padding:30px;color: #999999;" class="mui-text-center">暂无聊天记录</div>
+                     <div v-show="nochatlist" style="padding:30px;color: #999999;display: none;" class="mui-text-center">
+                     	去找朋友聊聊天吧
+                     	<!--<span style="font-size:10px;">&nbsp;暂无聊天记录</span>-->
+                     </div>
                      <div id="emoji"></div>
                      <!--<div  v-for="(item,index) in items" style="word-wrap: break-word;"> {{item}}</div>--> 	 
 				 </section>	
@@ -105,25 +107,35 @@
 					    	 return {
 					    	 	  host:config.host?config.host:'http://114.115.137.212',
 					    	 	  items : getRoomChatItemsLocalStorage(),
-					    	 	  uid: config.userInfo.id
+					    	 	  uid: config.userInfo.id,
+					    	 	  nochatlist:JSON.stringify(getRoomChatItemsLocalStorage())=='{}'
 					    	 }
 					    },
 					    beforeCreate:function(){	
 					    	
 					   },
+					   
 					   filters:{
 					   	    msg:function(value){
-					   	    	  value = JSON.parse(value);
-					   	    	  var _msg = common.restoreEmoji(value.msg);
+					   	    	  var _msg = common.restoreEmoji(value);
+					   	    	  var Base64Div = common.audioBase64(value,true);
 					   	    	  var imgReg = /^<img.+\/>$/g;
-					   	    	  if(imgReg.test(_msg)){
-					   	    	  	 _msg = '[ 图片 ]';
+					   	    	  if(Base64Div){
+					   	    	  	  _msg = '[ 语音 ]';
+					   	    	  }else if(imgReg.test(_msg)){
+						   	    	  _msg = '[ 图片 ]';
 					   	    	  }
 					   	    	  return _msg;
 					   	    },
 					   	    addtime:function(value){
 					   	    	  value = JSON.parse(value).addtime;					   	    	  
 					   	    	  return value
+					   	    }
+					   },
+					   watch:{
+					   	    items:function(){
+					   	    	var _this = this;
+					   	    	this.nochatlist = JSON.stringify(_this.items)=='{}'
 					   	    }
 					   }
 					})
@@ -134,10 +146,12 @@
 		<script type="text/javascript">			
 			  //缓存id根据缓存id拿到对应id的用户信息
 			  var __RoomChatItems = 'RoomChatItems'+config.userInfo.id;
-		
+			  
+//			  window.localStorage.removeItem(__RoomChatItems);
+
 			  function getRoomChatItemsLocalStorage(){
 			  	       var RoomChatItems = window.localStorage.getItem(__RoomChatItems);
-			  	       RoomChatItems = RoomChatItems!==null&&Object.prototype.toString.call(JSON.parse(RoomChatItems))==='[object Object]'?JSON.parse(RoomChatItems):{};
+			  	       RoomChatItems = RoomChatItems!==null&&Object.prototype.toString.call(JSON.parse(RoomChatItems))==='[object Object]'?JSON.parse(RoomChatItems):{};			  	       
 			  	       return RoomChatItems;
 			  }
 
@@ -171,7 +185,6 @@
 				  }	
 				  //查询所有的未读信息数量在首页显示
 				  function getChatNum(){
-				  	   console.log('getChatNum---------------->');
 				  	   var getnum = getRoomChatItemsLocalStorage();
 				  	   var _num = 0;
 				  	   for(var i in getnum){
@@ -191,6 +204,7 @@
 							    		uid:config.userInfo.id
 							    	},
 							    	success:function(data){
+//							    		console.log(data);
 							    		var result = JSON.parse(data).result;						    		
 							    		addRoomChatItemsLocalStorage(rid,[
 								    			 {name:'num',value:num}
@@ -200,6 +214,7 @@
 								    			,{name:'user_img',value:result['user_img']}
 								    			,{name:'username',value:result['username']}
 								    			,{name:'room_img',value:result['room_img']}
+								    			,{name:'addtime',value:result['addtime']}
 								    			,{name:'msgs',value:result['msg']}
 							    		]);
 							    		
@@ -216,7 +231,7 @@
 		<script type="text/javascript">
 
 				   // var localhost = 'http://127.0.0.1:3000/home';
-				   var localhost = 'http://114.115.137.212:3000/home';  
+				   var localhost = config.host+':3000/home';  
 				   var uid = config.userInfo.id;
 				   var reHomeChatNum = [];
 				   var home = io.connect(localhost);  
